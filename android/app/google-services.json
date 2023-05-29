@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235794776312",
+    "project_id": "etrick-99a39",
+    "storage_bucket": "etrick-99a39.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235794776312:android:58327c7f4ad81a652b7b0d",
+        "android_client_info": {
+          "package_name": "com.example.etrick"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSpI8eBsyFIEdt-TsX7LwlWf2yeV1F1t0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
