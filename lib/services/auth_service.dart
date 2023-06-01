@@ -78,21 +78,40 @@ class AuthService {
     await _auth.signOut();
   }
 
-  Future<void> resetPassword(String email) async {
-    await _auth.sendPasswordResetEmail(email: email);
+  Future<Map<bool, String>> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      print('[resetPassword] Email sent');
+      return {
+        true: "success",
+      };
+    } on FirebaseAuthException catch (e) {
+      print('[resetPassword] FirebaseAuthException: $e');
+      return {
+        false: e.toString(),
+      };
+    } catch (e) {
+      print('[resetPassword] error$e');
+      return {
+        false: e.toString(),
+      };
+    }
   }
 
   Future<Map<bool, String>> createAccount(
       AppUser appUser, String password) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: appUser.email,
         password: password,
       );
       print('[createAccount] User: ${_auth.currentUser!.email} is created!');
       await _auth.currentUser!
           .updateDisplayName('${appUser.firstName} ${appUser.lastName}');
-      await FirestoreService.createUser(appUser);
+      await FirestoreService.createUser(appUser.copyWith(
+        id: user.user!.uid,
+        email: user.user!.email,
+      ));
       return {
         true: "success",
       };
@@ -103,6 +122,28 @@ class AuthService {
       };
     } catch (e) {
       print('[createAccount] error$e');
+      return {
+        false: e.toString(),
+      };
+    }
+  }
+
+  // login
+  Future<Map<bool, String>> login(String email, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      print('[login] User: ${_auth.currentUser!.email} is logged in!');
+      return {
+        true: "success",
+      };
+    } on FirebaseAuthException catch (e) {
+      print('[login] FirebaseAuthException: $e');
+      return {
+        false: e.toString(),
+      };
+    } catch (e) {
+      print('[login] error$e');
       return {
         false: e.toString(),
       };

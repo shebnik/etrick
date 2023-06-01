@@ -1,6 +1,7 @@
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/services/auth_service.dart';
+import 'package:etrick/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       // show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.read<AuthService>().getFirebaseAuthErrorMessage(e)),
+          content:
+              Text(context.read<AuthService>().getFirebaseAuthErrorMessage(e)),
         ),
       );
     }
@@ -75,65 +77,71 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Form(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: firstNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Ім\'я',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: lastNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Прізвище',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Електронна пошта',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Пароль',
-                    border: const OutlineInputBorder(),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                      onPressed: _toggleObscurePassword,
+        child: SingleChildScrollView(
+          child: Form(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 16.0),
+                  const LogoWidget(),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: firstNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Ім\'я',
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _createAccount,
-                  child: const Text('Створити обліковий запис'),
-                ),
-                const SizedBox(height: 16.0),
-                TextButton(
-                  onPressed: () {
-                    context.go(Constants.loginLoc);
-                  },
-                  child: const Text('Увійти'),
-                ),
-              ],
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: lastNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Прізвище',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Електронна пошта',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      labelText: 'Пароль',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: _toggleObscurePassword,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: _createAccount,
+                    child: const Text('Створити обліковий запис'),
+                  ),
+                  const SizedBox(height: 16.0),
+                  
+                  TextButton(
+                    onPressed: () {
+                      context.go(Constants.loginLoc);
+                    },
+                    child: Text('Увійти',
+                        style: Theme.of(context).textTheme.labelLarge),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

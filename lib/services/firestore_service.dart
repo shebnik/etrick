@@ -36,5 +36,13 @@ class FirestoreService {
     });
   }
 
-  static createUser(AppUser appUser) {}
+  static Future<bool> createUser(AppUser appUser) async {
+    try {
+      await _users.doc(appUser.id).set(appUser);
+      return true;
+    } catch (e) {
+      print('[createUser] Error: $e');
+      return false;
+    }
+  }
 }

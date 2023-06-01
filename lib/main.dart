@@ -1,11 +1,13 @@
+import 'package:etrick/providers/theme_provider.dart';
 import 'package:etrick/services/app_router.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/theme.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'constants.dart';
 import 'firebase_options.dart';
 
@@ -19,6 +21,9 @@ Future<void> main() async {
       providers: [
         Provider(
           create: (_) => AuthService(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AppThemeProvider(),
         ),
       ],
       child: const MyApp(),
@@ -35,7 +40,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late ValueListenable<User?> userChanges;
-
   @override
   void initState() {
     final authService = context.read<AuthService>();
@@ -46,17 +50,22 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final router = AppRouter(userChanges).router;
-
-    return MaterialApp.router(
-      title: Constants.appName,
-      theme: AppTheme.darkTheme,
-      darkTheme: AppTheme.darkTheme,
-      routeInformationProvider: router.routeInformationProvider,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
-      debugShowCheckedModeBanner: false,
+    return Consumer<AppThemeProvider>(
+      builder: (context, value, child) => MaterialApp.router(
+        title: Constants.appName,
+        theme: AppTheme.lightTheme,
+        routeInformationProvider: router.routeInformationProvider,
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

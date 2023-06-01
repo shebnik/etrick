@@ -4,4 +4,5 @@ class Constants {
   static const createAccountLoc = '/create-account';
   static const loginLoc = '/login';
   static const resetPasswordLoc = '/reset-password';
+  static const logoAssetPath = 'assets/images/logo.png';
 }
