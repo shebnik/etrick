@@ -32,9 +32,61 @@ class AppTheme {
           ),
         ),
         textTheme: const TextTheme(
-            labelLarge: TextStyle(
-          fontSize: 18,
-        )),
+          labelLarge: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          labelMedium: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+          labelSmall: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+          headlineLarge: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          headlineSmall: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          bodyLarge: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 14,
+            color: Colors.black,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          titleMedium: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          titleSmall: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
       );
 
   static get darkTheme => ThemeData.dark().copyWith(

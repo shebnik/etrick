@@ -1,5 +1,7 @@
+import 'package:etrick/constants.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,7 +14,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.shopping_cart),
-          onPressed: () {},
+          onPressed: () {
+            context.push(Constants.cartLoc);
+          },
         ),
         PopupMenuButton(
           itemBuilder: (context) => [

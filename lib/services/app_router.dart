@@ -3,6 +3,7 @@ import 'package:etrick/pages/auth/create_account_page.dart';
 import 'package:etrick/pages/auth/login_page.dart';
 import 'package:etrick/pages/auth/reset_password.dart';
 import 'package:etrick/pages/home/home_page.dart';
+import 'package:etrick/pages/home/my_cart/my_cart_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class AppRouter {
         print('redirecting to login page');
         return Constants.createAccountLoc;
       }
-      if (loggedIn) {
+      if (loggedIn && !loggedIn) {
         print('redirecting to root page');
         return Constants.homeLoc;
       }
@@ -34,10 +35,6 @@ class AppRouter {
     },
     debugLogDiagnostics: true,
     routes: [
-      GoRoute(
-        path: Constants.homeLoc,
-        builder: (context, routerState) => const HomePage(),
-      ),
       GoRoute(
         path: Constants.createAccountLoc,
         builder: (context, routerState) => const CreateAccountPage(),
@@ -49,6 +46,14 @@ class AppRouter {
       GoRoute(
         path: Constants.resetPasswordLoc,
         builder: (context, routerState) => const ResetPassword(),
+      ),
+      GoRoute(
+        path: Constants.homeLoc,
+        builder: (context, routerState) => const HomePage(),
+      ),
+      GoRoute(
+        path: Constants.cartLoc,
+        builder: (context, routerState) => const MyCartPage(),
       ),
     ],
     errorPageBuilder: (context, state) => MaterialPage<void>(

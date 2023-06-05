@@ -1,3 +1,5 @@
+import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/providers/theme_provider.dart';
 import 'package:etrick/services/app_router.dart';
 import 'package:etrick/services/auth_service.dart';
@@ -24,6 +26,17 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => AppThemeProvider(),
+        ),
+        Provider(create: (_) => CatalogModel(items: [])),
+        ChangeNotifierProxyProvider<CatalogModel, CartModel>(
+          create: (_) => CartModel(),
+          update: (_, catalog, cart) {
+            if (cart == null) {
+              throw ArgumentError.notNull('cart');
+            }
+            cart.catalog = catalog;
+            return cart;
+          },
         ),
       ],
       child: const MyApp(),
