@@ -1,7 +1,10 @@
-import 'package:etrick/pages/home/navigation_pages/catalog_page.dart';
+import 'package:etrick/models/catalog_model.dart';
+import 'package:etrick/pages/home/navigation_pages/catalog/catalog_page.dart';
 import 'package:etrick/pages/home/navigation_pages/home_main_page.dart';
 import 'package:etrick/pages/home/navigation_pages/profile_page.dart';
+import 'package:etrick/services/firestore_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'home_app_bar.dart';
 
@@ -66,6 +69,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<CatalogModel>().items = await FirestoreService.getCatalog();
+    });
   }
 
   @override

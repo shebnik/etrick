@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etrick/models/app_user.dart';
+import 'package:etrick/models/catalog_model.dart';
 
 class FirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   static const String _usersCollectionPath = 'users';
+  static const String _catalogCollectionPath = 'catalog';
 
   // Collection references
   static final CollectionReference<AppUser> _users =
@@ -12,6 +14,13 @@ class FirestoreService {
             fromFirestore: (snapshot, _) =>
                 AppUser.fromMap(snapshot.data() as Map<String, dynamic>),
             toFirestore: (user, _) => user.toMap(),
+          );
+
+  static final CollectionReference<CatalogItem> _catalog =
+      _firestore.collection(_catalogCollectionPath).withConverter(
+            fromFirestore: (snapshot, _) =>
+                CatalogItem.fromMap(snapshot.data() as Map<String, dynamic>),
+            toFirestore: (catalogItem, _) => catalogItem.toMap(),
           );
 
   static Future<bool> updateUser(AppUser user) {
@@ -32,7 +41,7 @@ class FirestoreService {
         .then((value) => value.data() as AppUser)
         .catchError((error) {
       print('[getUserById] Error: $error');
-      return null;
+      return AppUser.empty();
     });
   }
 
@@ -43,6 +52,16 @@ class FirestoreService {
     } catch (e) {
       print('[createUser] Error: $e');
       return false;
+    }
+  }
+
+  static Future<List<CatalogItem>> getCatalog() async {
+    try {
+      final catalog = await _catalog.get();
+      return catalog.docs.map((e) => e.data()).toList();
+    } catch (e) {
+      print('[getCatalog] Error: $e');
+      return [];
     }
   }
 }

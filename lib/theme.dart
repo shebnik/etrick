@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 
+class NoTransitionsBuilder extends PageTransitionsBuilder {
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
+  }
+}
+
 class AppTheme {
   static const primaryColor = Color(0xFF396FE2);
   static const lightBackgroundColor = Color(0xFAFAFAFA);
   static const primaryDark = Color(0xFF474747);
 
   static get lightTheme => ThemeData.light().copyWith(
+        primaryColorLight: primaryColor,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: NoTransitionsBuilder(),
+            TargetPlatform.iOS: NoTransitionsBuilder(),
+          },
+        ),
         primaryColor: lightBackgroundColor,
         scaffoldBackgroundColor: lightBackgroundColor,
         appBarTheme: const AppBarTheme(

@@ -1,19 +1,32 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
-class CatalogModel {
-  final List<CatalogItem> items;
+class CatalogModel extends ChangeNotifier {
+  List<CatalogItem> _items;
 
   CatalogModel({
-    required this.items,
-  });
+    required List<CatalogItem> items,
+  }) : _items = items;
 
-  CatalogItem getById(String id) => items.firstWhere(
+  List<CatalogItem> get items => _items;
+  
+  set items(List<CatalogItem> items) {
+    _items = items;
+    notifyListeners();
+  }
+
+  List<CatalogItem> getItemsByCategory(String category) => _items
+      .where(
+        (element) => element.category == category,
+      )
+      .toList();
+
+  CatalogItem getById(String id) => _items.firstWhere(
         (element) => element.id == id,
       );
 
   CatalogItem getByPosition(int position) {
-    return items[position];
+    return _items[position];
   }
 }
 
@@ -23,6 +36,7 @@ class CatalogItem {
   final String name;
   final String description;
   final double price;
+  final String category;
   final List<String> colors;
 
   const CatalogItem({
@@ -30,6 +44,7 @@ class CatalogItem {
     required this.name,
     required this.description,
     required this.price,
+    required this.category,
     required this.colors,
   });
 
@@ -38,6 +53,7 @@ class CatalogItem {
     String? name,
     String? description,
     double? price,
+    String? category,
     List<String>? colors,
   }) {
     return CatalogItem(
@@ -45,48 +61,53 @@ class CatalogItem {
       name: name ?? this.name,
       description: description ?? this.description,
       price: price ?? this.price,
+      category: category ?? this.category,
       colors: colors ?? this.colors,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'name': name,
       'description': description,
       'price': price,
+      'category': category,
       'colors': colors,
     };
   }
 
   factory CatalogItem.fromMap(Map<String, dynamic> map) {
     return CatalogItem(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      description: map['description'] as String,
-      price: map['price'] as double,
-      colors: List<String>.from((map['colors'] as List<String>)),
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      price: map['price'],
+      category: map['category'],
+      colors: List<String>.from(map['colors']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory CatalogItem.fromJson(String source) =>
-      CatalogItem.fromMap(json.decode(source) as Map<String, dynamic>);
+      CatalogItem.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'CatalogItem(id: $id, name: $name, description: $description, price: $price, colors: $colors)';
+    return 'CatalogItem(id: $id, name: $name, description: $description, price: $price, category: $category, colors: $colors)';
   }
 
   @override
-  bool operator ==(covariant CatalogItem other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other.id == id &&
+    return other is CatalogItem &&
+        other.id == id &&
         other.name == name &&
         other.description == description &&
         other.price == price &&
+        other.category == category &&
         listEquals(other.colors, colors);
   }
 
@@ -96,6 +117,7 @@ class CatalogItem {
         name.hashCode ^
         description.hashCode ^
         price.hashCode ^
+        category.hashCode ^
         colors.hashCode;
   }
 }

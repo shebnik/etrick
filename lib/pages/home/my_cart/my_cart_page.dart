@@ -2,14 +2,14 @@ import 'package:etrick/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MyCartPage extends StatefulWidget {
-  const MyCartPage({super.key});
+class CartPage extends StatefulWidget {
+  const CartPage({super.key});
 
   @override
-  State<MyCartPage> createState() => _MyCartPageState();
+  State<CartPage> createState() => _CartPageState();
 }
 
-class _MyCartPageState extends State<MyCartPage> {
+class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(

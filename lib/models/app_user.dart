@@ -59,4 +59,15 @@ class AppUser {
       photoUrl: photoUrl ?? this.photoUrl,
     );
   }
+
+  factory AppUser.empty() {
+    return AppUser(
+      id: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      photoUrl: '',
+    );
+  }
 }

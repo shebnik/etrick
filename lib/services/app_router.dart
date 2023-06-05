@@ -4,6 +4,7 @@ import 'package:etrick/pages/auth/login_page.dart';
 import 'package:etrick/pages/auth/reset_password.dart';
 import 'package:etrick/pages/home/home_page.dart';
 import 'package:etrick/pages/home/my_cart/my_cart_page.dart';
+import 'package:etrick/pages/home/navigation_pages/catalog/category_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,13 @@ class AppRouter {
         print('redirecting to login page');
         return Constants.createAccountLoc;
       }
-      if (loggedIn && !loggedIn) {
+      if (loggedIn &&
+          [
+            Constants.createAccountLoc,
+            Constants.loginLoc,
+            Constants.resetPasswordLoc
+          ].contains(state.matchedLocation) &&
+          state.queryParameters.isEmpty) {
         print('redirecting to root page');
         return Constants.homeLoc;
       }
@@ -53,8 +60,16 @@ class AppRouter {
       ),
       GoRoute(
         path: Constants.cartLoc,
-        builder: (context, routerState) => const MyCartPage(),
+        builder: (context, routerState) => const CartPage(),
       ),
+      ...Constants.categories.keys.map((String category) {
+        return GoRoute(
+          path: '/$category',
+          builder: (context, routerState) => CategoryPage(
+            category: category,
+          ),
+        );
+      }).toList(),
     ],
     errorPageBuilder: (context, state) => MaterialPage<void>(
       key: state.pageKey,

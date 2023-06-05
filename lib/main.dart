@@ -27,7 +27,7 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => AppThemeProvider(),
         ),
-        Provider(create: (_) => CatalogModel(items: [])),
+        ChangeNotifierProvider(create: (_) => CatalogModel(items: [])),
         ChangeNotifierProxyProvider<CatalogModel, CartModel>(
           create: (_) => CartModel(),
           update: (_, catalog, cart) {

@@ -5,12 +5,17 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBar({Key? key}) : super(key: key);
+  const HomeAppBar({
+    Key? key,
+    this.title = 'eTrick',
+  }) : super(key: key);
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('eTrick'),
+      title: Text(title),
       actions: [
         IconButton(
           icon: const Icon(Icons.shopping_cart),
