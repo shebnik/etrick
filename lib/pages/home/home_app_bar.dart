@@ -23,18 +23,18 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             context.push(Constants.cartLoc);
           },
         ),
-        PopupMenuButton(
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              child: TextButton(
-                onPressed: () async {
-                  await context.read<AuthService>().signOut();
-                },
-                child: const Text('Вийти'),
-              ),
-            ),
-          ],
-        ),
+        // PopupMenuButton(
+        //   itemBuilder: (context) => [
+        //     PopupMenuItem(
+        //       child: TextButton(
+        //         onPressed: () async {
+        //           await context.read<AuthService>().signOut();
+        //         },
+        //         child: const Text('Вийти'),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }

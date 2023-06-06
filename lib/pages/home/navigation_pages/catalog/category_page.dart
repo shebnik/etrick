@@ -34,6 +34,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    var items = context.watch<CatalogModel>().getItemsByCategory(_category);
     return Scaffold(
       appBar: HomeAppBar(
         title: Constants.categories[_category] ?? Constants.appName,
@@ -42,15 +43,11 @@ class _CategoryPageState extends State<CategoryPage> {
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
+            childAspectRatio: 0.7,
           ),
           shrinkWrap: true,
-          itemCount: context
-              .watch<CatalogModel>()
-              .getItemsByCategory(_category)
-              .length,
-          itemBuilder: (context, index) => CatalogListItem(
-            index: index,
-          ),
+          itemCount: items.length,
+          itemBuilder: (_, index) => CatalogListItem(index: index),
         ),
       ),
     );

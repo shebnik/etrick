@@ -39,8 +39,9 @@ class AppTheme {
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: primaryColor,
-          selectedItemColor: Colors.black,
+          selectedItemColor: Colors.white,
           unselectedItemColor: Colors.black54,
+          selectedIconTheme: IconThemeData(color: Colors.white),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(

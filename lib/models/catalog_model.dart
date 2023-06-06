@@ -82,7 +82,7 @@ class CatalogItem {
       id: map['id'],
       name: map['name'],
       description: map['description'],
-      price: map['price'],
+      price:  double.parse(map['price'].toString()),
       category: map['category'],
       colors: List<String>.from(map['colors']),
     );
