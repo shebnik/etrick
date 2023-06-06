@@ -35,6 +35,7 @@ Future<void> main() async {
               throw ArgumentError.notNull('cart');
             }
             cart.catalog = catalog;
+            cart.loadCart();
             return cart;
           },
         ),

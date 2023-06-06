@@ -11,10 +11,12 @@ class ItemPhotoSlider extends StatefulWidget {
     super.key,
     required this.item,
     required this.quality,
+    this.color,
   });
 
   final CatalogItem item;
   final PictureQuality quality;
+  final String? color;
 
   @override
   State<ItemPhotoSlider> createState() => _ItemPhotoSliderState();
@@ -36,6 +38,7 @@ class _ItemPhotoSliderState extends State<ItemPhotoSlider> {
       photosCount = await StorageService.getPicturesCount(
         item: item,
         quality: quality,
+        color: widget.color,
       );
       setState(() {});
     });
@@ -61,6 +64,7 @@ class _ItemPhotoSliderState extends State<ItemPhotoSlider> {
                 item: item,
                 pictureId: index,
                 quality: quality,
+                color: widget.color,
               ),
               builder: (_, snapshot) => snapshot.data == null
                   ? const SizedBox.shrink()

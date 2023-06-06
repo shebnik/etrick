@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:collection/collection.dart';
 
 class CatalogModel extends ChangeNotifier {
   List<CatalogItem> _items;
@@ -9,7 +10,7 @@ class CatalogModel extends ChangeNotifier {
   }) : _items = items;
 
   List<CatalogItem> get items => _items;
-  
+
   set items(List<CatalogItem> items) {
     _items = items;
     notifyListeners();
@@ -21,9 +22,8 @@ class CatalogModel extends ChangeNotifier {
       )
       .toList();
 
-  CatalogItem getById(String id) => _items.firstWhere(
-        (element) => element.id == id,
-      );
+  CatalogItem? getById(String id) =>
+      _items.firstWhereOrNull((element) => element.id == id);
 
   CatalogItem getByPosition(int position) {
     return _items[position];
@@ -82,7 +82,7 @@ class CatalogItem {
       id: map['id'],
       name: map['name'],
       description: map['description'],
-      price:  double.parse(map['price'].toString()),
+      price: double.parse(map['price'].toString()),
       category: map['category'],
       colors: List<String>.from(map['colors']),
     );

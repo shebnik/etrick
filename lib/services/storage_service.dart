@@ -9,12 +9,14 @@ class StorageService {
   static Future<String> getPicture({
     required CatalogItem item,
     required int pictureId,
+    String? color,
     PictureQuality quality = PictureQuality.high,
   }) {
+    color ??= item.colors.first;
     return storage
         .ref()
         .child(
-            'catalog/${item.category}/${item.id}/${item.colors.first}/${quality.name}/${pictureId + 1}.jpg')
+            'catalog/${item.category}/${item.id}/$color/${quality.name}/${pictureId + 1}.jpg')
         .getDownloadURL();
   }
 
