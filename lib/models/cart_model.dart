@@ -17,6 +17,11 @@ class CartModel extends ChangeNotifier {
       .where((item) => item != null)
       .toList();
 
+  int getItemsCount() => items.fold(
+        0,
+        (total, item) => total + _itemQuantities[item!.id]!,
+      );
+
   double get totalPrice => items.fold(
         0,
         (total, item) => total + (item!.price * _itemQuantities[item.id]!),
