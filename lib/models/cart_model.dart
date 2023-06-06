@@ -3,8 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class CartModel extends ChangeNotifier {
   late CatalogModel _catalog;
-
-  final List<String> _itemIds = [];
+  final Map<String, int> _itemQuantities = {};
 
   CatalogModel get catalog => _catalog;
 
@@ -13,18 +12,49 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<CatalogItem> get items => _itemIds.map((id) => _catalog.getById(id)).toList();
+  List<CatalogItem> get items => _itemQuantities.keys
+      .map((id) => _catalog.getById(id))
+      .where((item) => item != null)
+      .toList();
 
-  double get totalPrice =>
-      items.fold(0, (total, current) => total + current.price);
+  double get totalPrice => items.fold(
+        0,
+        (total, item) => total + (item!.price * _itemQuantities[item.id]!),
+      );
 
   void add(CatalogItem item) {
-    _itemIds.add(item.id);
+    if (_itemQuantities.containsKey(item.id)) {
+      _itemQuantities[item.id] = _itemQuantities[item.id]! + 1;
+    } else {
+      _itemQuantities[item.id] = 1;
+    }
     notifyListeners();
   }
 
   void remove(CatalogItem item) {
-    _itemIds.remove(item.id);
+    _itemQuantities.remove(item.id);
     notifyListeners();
+  }
+
+  void decrement(CatalogItem item) {
+    if (_itemQuantities.containsKey(item.id)) {
+      if (_itemQuantities[item.id]! > 1) {
+        _itemQuantities[item.id] = _itemQuantities[item.id]! - 1;
+      } else {
+        remove(item);
+      }
+      notifyListeners();
+    }
+  }
+
+  void increment(CatalogItem item) {
+    if (_itemQuantities.containsKey(item.id)) {
+      _itemQuantities[item.id] = _itemQuantities[item.id]! + 1;
+    }
+    notifyListeners();
+  }
+
+  int getItemQuantity(CatalogItem item) {
+    return _itemQuantities[item.id] ?? 0;
   }
 }
