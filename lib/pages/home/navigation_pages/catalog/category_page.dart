@@ -4,8 +4,9 @@ import 'package:etrick/constants.dart';
 import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/pages/home/home_app_bar.dart';
+import 'package:etrick/pages/home/navigation_pages/catalog/catalog_list_item.dart';
 import 'package:etrick/services/storage_service.dart';
-import 'package:etrick/theme.dart';
+import 'package:etrick/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -47,10 +48,11 @@ class _CategoryPageState extends State<CategoryPage> {
               .watch<CatalogModel>()
               .getItemsByCategory(_category)
               .length,
-          itemBuilder: (context, index) => _ListItem(index),
+          itemBuilder: (context, index) => CatalogListItem(
+            index: index,
+          ),
         ),
       ),
     );
   }
 }
-
