@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:etrick/models/cart_item.dart';
 import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 class CatalogModel extends ChangeNotifier {
@@ -47,6 +49,17 @@ class CatalogItem {
     required this.category,
     required this.colors,
   });
+
+  factory CatalogItem.fromCartItem(CartItem item) {
+    return CatalogItem(
+      id: item.id,
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      category: item.category,
+      colors: [item.color],
+    );
+  }
 
   CatalogItem copyWith({
     String? id,

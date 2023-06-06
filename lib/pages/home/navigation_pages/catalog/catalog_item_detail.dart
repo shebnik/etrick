@@ -1,3 +1,4 @@
+import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/pages/home/home_app_bar.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/add_to_cart.dart';
@@ -78,7 +79,10 @@ class _CatalogItemDetailState extends State<CatalogItemDetail> {
                       ),
                     ],
                   ),
-                  AddToCart(item: item),
+                  AddToCart(
+                    item: CartItem.fromCatalogItem(item)
+                        .copyWith(color: selectedColor),
+                  ),
                 ],
               ),
             ),
@@ -142,7 +146,7 @@ class ColorSwitcher extends StatefulWidget {
   });
 
   @override
-  _ColorSwitcherState createState() => _ColorSwitcherState();
+  State<ColorSwitcher> createState() => _ColorSwitcherState();
 }
 
 class _ColorSwitcherState extends State<ColorSwitcher> {
@@ -193,7 +197,7 @@ class _ColorSwitcherState extends State<ColorSwitcher> {
                 const SizedBox(width: 8),
                 Text(
                   Utils.capitalize(widget.color),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

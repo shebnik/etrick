@@ -1,21 +1,20 @@
 import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
+import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/cart_model.dart';
-import 'package:etrick/models/catalog_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AddToCart extends StatelessWidget {
-  final CatalogItem item;
+  final CartItem item;
 
   const AddToCart({required this.item, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var isInCart = context.select<CartModel, bool>(
-      (cart) => cart.items.contains(item),
-    );
+    var cart = context.watch<CartModel>();
+    var isInCart = cart.isInCart(item);
 
     return Container(
       decoration: BoxDecoration(

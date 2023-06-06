@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
+import 'package:etrick/services/utils.dart';
 
 class FirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -29,7 +30,7 @@ class FirestoreService {
         .update(user.toMap())
         .then((value) => true)
         .catchError((error) {
-      print('[updateUser] Error: $error');
+      Utils.log('[updateUser] Error: $error');
       return false;
     });
   }
@@ -40,7 +41,7 @@ class FirestoreService {
         .get()
         .then((value) => value.data() as AppUser)
         .catchError((error) {
-      print('[getUserById] Error: $error');
+      Utils.log('[getUserById] Error: $error');
       return AppUser.empty();
     });
   }
@@ -50,7 +51,7 @@ class FirestoreService {
       await _users.doc(appUser.id).set(appUser);
       return true;
     } catch (e) {
-      print('[createUser] Error: $e');
+      Utils.log('[createUser] Error: $e');
       return false;
     }
   }
@@ -60,7 +61,7 @@ class FirestoreService {
       final catalog = await _catalog.get();
       return catalog.docs.map((e) => e.data()).toList();
     } catch (e) {
-      print('[getCatalog] Error: $e');
+      Utils.log('[getCatalog] Error: $e');
       return [];
     }
   }

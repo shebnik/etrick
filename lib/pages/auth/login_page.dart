@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontWeight: FontWeight.normal,
                           ),
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: 'Забули пароль?',
                         ),
                         const WidgetSpan(

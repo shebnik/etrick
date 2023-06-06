@@ -1,14 +1,11 @@
-import 'package:etrick/constants.dart';
-import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/add_to_cart.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_item_detail.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/item_photo_slider.dart';
 import 'package:etrick/services/storage_service.dart';
-import 'package:etrick/app_theme.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CatalogListItem extends StatefulWidget {
@@ -72,7 +69,7 @@ class _CatalogListItemState extends State<CatalogListItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  AddToCart(item: item),
+                  AddToCart(item: CartItem.fromCatalogItem(item)),
                 ],
               ),
             ],

@@ -81,7 +81,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                 const SizedBox(height: 20),
                 Text(
                   'ETRICK',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 32,
+                      ),
                 ),
                 const SizedBox(height: 20),
                 ValueListenableBuilder(

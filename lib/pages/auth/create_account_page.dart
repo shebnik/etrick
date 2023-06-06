@@ -117,7 +117,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       errorText:
                           value ? 'Будь ласка, введіть правильне ім\'я' : null,
                       labelText: 'Ім\'я',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -131,7 +131,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ? 'Будь ласка, введіть правильне прізвище'
                           : null,
                       labelText: 'Прізвище',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -144,7 +144,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       errorText:
                           value ? 'Будь ласка, введіть правильний email' : null,
                       labelText: 'Email',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                 ),
@@ -162,7 +162,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             ? 'Будь ласка, введіть пароль (мін. 8 символів)'
                             : null,
                         labelText: 'Пароль',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         suffixIcon: IconButton(
                           onPressed: _toggleObscurePassword,
                           icon: Icon(
@@ -185,7 +185,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   onPressed: () {
                     context.go(Constants.loginLoc);
                   },
-                  child: Text(
+                  child: const Text(
                     'Увійти',
                   ),
                 ),

@@ -1,14 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:etrick/constants.dart';
-import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/pages/home/home_app_bar.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_list_item.dart';
-import 'package:etrick/services/storage_service.dart';
-import 'package:etrick/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CategoryPage extends StatefulWidget {

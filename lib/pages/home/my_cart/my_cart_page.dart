@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/storage_service.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _CartPageState extends State<CartPage> {
                                   const SizedBox(width: 16),
                                   FutureBuilder(
                                     future: StorageService.getPicture(
-                                      item: item,
+                                      item: CatalogItem.fromCartItem(item),
                                       pictureId: 0,
                                       quality: PictureQuality.low,
                                     ),
@@ -99,7 +100,7 @@ class _CartPageState extends State<CartPage> {
                                         splashRadius: 16,
                                         icon: const Icon(Icons.remove),
                                         onPressed: () {
-                                          if (cart.getItemQuantity(item) > 1) {
+                                          if (item.quantity > 1) {
                                             cart.decrement(item);
                                           }
                                         },

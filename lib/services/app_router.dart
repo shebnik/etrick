@@ -6,6 +6,7 @@ import 'package:etrick/pages/home/checkout/checkout_page.dart';
 import 'package:etrick/pages/home/home_page.dart';
 import 'package:etrick/pages/home/my_cart/my_cart_page.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/category_page.dart';
+import 'package:etrick/services/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class AppRouter {
       final bool loggedIn = firebaseUser.value != null;
 
       if (!loggedIn && !loggingIn) {
-        print('redirecting to login page');
+        Utils.log('redirecting to login page');
         return Constants.createAccountLoc;
       }
       if (loggedIn &&
@@ -36,7 +37,7 @@ class AppRouter {
             Constants.resetPasswordLoc
           ].contains(state.matchedLocation) &&
           state.queryParameters.isEmpty) {
-        print('redirecting to root page');
+        Utils.log('redirecting to root page');
         return Constants.homeLoc;
       }
       return null;

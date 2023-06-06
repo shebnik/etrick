@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Utils {
@@ -42,4 +43,7 @@ class Utils {
       return '$firstLetter$rest';
     }).join(' ');
   }
+
+  // ignore: avoid_print
+  static log(String message) => kDebugMode ? print(message) : null;
 }

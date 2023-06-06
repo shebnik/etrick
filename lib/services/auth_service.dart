@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/services/firestore_service.dart';
+import 'package:etrick/services/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -16,9 +17,9 @@ class AuthService {
   void initialize() {
     authStateChanges.listen((User? user) {
       if (user == null) {
-        print('User is currently signed out!');
+        Utils.log('User is currently signed out!');
       } else {
-        print('User is signed in!');
+        Utils.log('User is signed in!');
       }
     });
   }
@@ -46,18 +47,18 @@ class AuthService {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      print(
+      Utils.log(
           '[signInWithEmailAndPassword] User: ${_auth.currentUser!.email} is logged in!');
       return {
         true: "success",
       };
     } on FirebaseAuthException catch (e) {
-      print('[signInWithEmailAndPassword] FirebaseAuthException: $e');
+      Utils.log('[signInWithEmailAndPassword] FirebaseAuthException: $e');
       return {
         false: e.toString(),
       };
     } catch (e) {
-      print('[signInWithEmailAndPassword] error$e');
+      Utils.log('[signInWithEmailAndPassword] error$e');
       return {
         false: e.toString(),
       };
@@ -65,9 +66,16 @@ class AuthService {
   }
 
   String getFirebaseAuthErrorMessage(String errorString) {
-    String errorCode = errorString
-        .substring(errorString.indexOf("(") + 1, errorString.indexOf(")"))
-        .replaceAll("auth/", "");
+    String errorCode;
+    try {
+      errorCode = errorString
+          .substring(errorString.indexOf("(") + 1, errorString.indexOf(")"))
+          .replaceAll("auth/", "");
+    } catch (e) {
+      errorCode = errorString
+          .substring(errorString.indexOf("[") + 1, errorString.indexOf("]"))
+          .replaceAll("firebase_auth/", "");
+    }
     switch (errorCode) {
       case 'invalid-email':
       case 'user-not-found':
@@ -90,24 +98,24 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    print('Signing out');
+    Utils.log('Signing out');
     await _auth.signOut();
   }
 
   Future<Map<bool, String>> resetPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-      print('[resetPassword] Email sent');
+      Utils.log('[resetPassword] Email sent');
       return {
         true: "success",
       };
     } on FirebaseAuthException catch (e) {
-      print('[resetPassword] FirebaseAuthException: $e');
+      Utils.log('[resetPassword] FirebaseAuthException: $e');
       return {
         false: e.toString(),
       };
     } catch (e) {
-      print('[resetPassword] error$e');
+      Utils.log('[resetPassword] error$e');
       return {
         false: e.toString(),
       };
@@ -121,7 +129,7 @@ class AuthService {
         email: appUser.email,
         password: password,
       );
-      print('[createAccount] User: ${_auth.currentUser!.email} is created!');
+      Utils.log('[createAccount] User: ${_auth.currentUser!.email} is created!');
       await _auth.currentUser!
           .updateDisplayName('${appUser.firstName} ${appUser.lastName}');
       await FirestoreService.createUser(appUser.copyWith(
@@ -132,12 +140,12 @@ class AuthService {
         true: "success",
       };
     } on FirebaseAuthException catch (e) {
-      print('[createAccount] FirebaseAuthException: $e');
+      Utils.log('[createAccount] FirebaseAuthException: $e');
       return {
         false: e.toString(),
       };
     } catch (e) {
-      print('[createAccount] error$e');
+      Utils.log('[createAccount] error$e');
       return {
         false: e.toString(),
       };
@@ -149,17 +157,17 @@ class AuthService {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      print('[login] User: ${_auth.currentUser!.email} is logged in!');
+      Utils.log('[login] User: ${_auth.currentUser!.email} is logged in!');
       return {
         true: "success",
       };
     } on FirebaseAuthException catch (e) {
-      print('[login] FirebaseAuthException: $e');
+      Utils.log('[login] FirebaseAuthException: $e');
       return {
         false: e.toString(),
       };
     } catch (e) {
-      print('[login] error$e');
+      Utils.log('[login] error$e');
       return {
         false: e.toString(),
       };

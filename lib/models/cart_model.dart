@@ -1,10 +1,13 @@
+import 'dart:convert';
+
+import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartModel extends ChangeNotifier {
   late CatalogModel _catalog;
-  final Map<String, int> _items = {};
+  final List<CartItem> _items = [];
 
   CatalogModel get catalog => _catalog;
 
@@ -13,88 +16,78 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<CatalogItem> get items => _items.keys
-      .map((id) => _catalog.getById(id))
-      .where((item) => item != null)
-      .toList()
-      .cast<CatalogItem>();
+  List<CartItem> get items => _items;
 
-  int getItemsCount() => items.fold(
-        0,
-        (total, item) => total + _items[item!.id]!,
-      );
+  int getItemsCount() => items.fold(0, (total, item) => total + item.quantity);
 
   double get totalPrice => items.fold(
         0,
-        (total, item) => total + (item!.price * _items[item.id]!),
+        (total, item) => total + (item.price * item.quantity),
       );
 
   Future<void> loadCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? savedCartList = prefs.getStringList('cart');
+    List<String>? savedCart = prefs.getStringList('cart');
 
-    if (savedCartList != null) {
-      Map<String, int> savedQuantities = savedCartList.fold(
-        {},
-        (Map<String, int> quantities, String item) {
-          List<String> parts = item.split(':');
-          quantities[parts[0]] = int.parse(parts[1]);
-          return quantities;
-        },
-      );
-
+    if (savedCart != null) {
+      final savedItems =
+          savedCart.map((item) => CartItem.fromJson(jsonDecode(item))).toList();
       _items.clear();
-      _items.addAll(savedQuantities);
+      _items.addAll(savedItems);
       notifyListeners();
     }
   }
 
   Future<void> saveCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> cartList = _items.entries
-        .map((entry) => '${entry.key}:${entry.value.toString()}')
-        .toList();
-    await prefs.setStringList('cart', cartList);
+    await prefs.setStringList(
+      'cart',
+      items.map((item) => jsonEncode(item.toJson())).toList(),
+    );
   }
 
-  void add(CatalogItem item) {
-    if (_items.containsKey(item.id)) {
-      _items[item.id] = _items[item.id]! + 1;
-    } else {
-      _items[item.id] = 1;
-    }
+  void add(CartItem item) {
+    _items.add(item);
     notifyListeners();
   }
 
-  void remove(CatalogItem item) {
-    _items.remove(item.id);
+  void remove(CartItem item) {
+    _items.remove(item);
     notifyListeners();
   }
 
-  void decrement(CatalogItem item) {
-    if (_items.containsKey(item.id)) {
-      if (_items[item.id]! > 1) {
-        _items[item.id] = _items[item.id]! - 1;
+  void decrement(CartItem item) {
+    final index = _items.indexOf(item);
+    if (index >= 0) {
+      final currentItem = _items[index];
+      if (currentItem.quantity > 1) {
+        currentItem.quantity -= 1;
       } else {
-        remove(item);
+        _items.removeAt(index);
       }
       notifyListeners();
     }
   }
 
-  void increment(CatalogItem item) {
-    if (_items.containsKey(item.id)) {
-      _items[item.id] = _items[item.id]! + 1;
+  void increment(CartItem item) {
+    final index = _items.indexOf(item);
+    if (index >= 0) {
+      final currentItem = _items[index];
+      currentItem.quantity += 1;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
-  int getItemQuantity(CatalogItem item) {
-    return _items[item.id] ?? 0;
+  int? getItemQuantity(CartItem item) {
+    final index = _items.indexOf(item);
+    if (index >= 0) {
+      return _items[index].quantity;
+    }
+    return null;
   }
 
-  bool isInCart(CatalogItem item) {
-    return items.any((cartItem) => item == cartItem);
+  bool isInCart(CartItem item) {
+    return items.any((cartItem) => item.id == cartItem.id && item.color == cartItem.color);
   }
 
   @override

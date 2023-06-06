@@ -16,7 +16,7 @@ class LogoWidget extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           'ETRICK',
-          style: Theme.of(context).textTheme.headline6?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 64,
