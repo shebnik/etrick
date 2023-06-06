@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CartModel extends ChangeNotifier {
   late CatalogModel _catalog;
-  final Map<String, int> _itemQuantities = {};
+  final Map<String, int> _items = {};
 
   CatalogModel get catalog => _catalog;
 
@@ -13,7 +13,7 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<CatalogItem> get items => _itemQuantities.keys
+  List<CatalogItem> get items => _items.keys
       .map((id) => _catalog.getById(id))
       .where((item) => item != null)
       .toList()
@@ -21,12 +21,12 @@ class CartModel extends ChangeNotifier {
 
   int getItemsCount() => items.fold(
         0,
-        (total, item) => total + _itemQuantities[item!.id]!,
+        (total, item) => total + _items[item!.id]!,
       );
 
   double get totalPrice => items.fold(
         0,
-        (total, item) => total + (item!.price * _itemQuantities[item.id]!),
+        (total, item) => total + (item!.price * _items[item.id]!),
       );
 
   Future<void> loadCart() async {
@@ -43,38 +43,38 @@ class CartModel extends ChangeNotifier {
         },
       );
 
-      _itemQuantities.clear();
-      _itemQuantities.addAll(savedQuantities);
+      _items.clear();
+      _items.addAll(savedQuantities);
       notifyListeners();
     }
   }
 
   Future<void> saveCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> cartList = _itemQuantities.entries
+    List<String> cartList = _items.entries
         .map((entry) => '${entry.key}:${entry.value.toString()}')
         .toList();
     await prefs.setStringList('cart', cartList);
   }
 
   void add(CatalogItem item) {
-    if (_itemQuantities.containsKey(item.id)) {
-      _itemQuantities[item.id] = _itemQuantities[item.id]! + 1;
+    if (_items.containsKey(item.id)) {
+      _items[item.id] = _items[item.id]! + 1;
     } else {
-      _itemQuantities[item.id] = 1;
+      _items[item.id] = 1;
     }
     notifyListeners();
   }
 
   void remove(CatalogItem item) {
-    _itemQuantities.remove(item.id);
+    _items.remove(item.id);
     notifyListeners();
   }
 
   void decrement(CatalogItem item) {
-    if (_itemQuantities.containsKey(item.id)) {
-      if (_itemQuantities[item.id]! > 1) {
-        _itemQuantities[item.id] = _itemQuantities[item.id]! - 1;
+    if (_items.containsKey(item.id)) {
+      if (_items[item.id]! > 1) {
+        _items[item.id] = _items[item.id]! - 1;
       } else {
         remove(item);
       }
@@ -83,14 +83,14 @@ class CartModel extends ChangeNotifier {
   }
 
   void increment(CatalogItem item) {
-    if (_itemQuantities.containsKey(item.id)) {
-      _itemQuantities[item.id] = _itemQuantities[item.id]! + 1;
+    if (_items.containsKey(item.id)) {
+      _items[item.id] = _items[item.id]! + 1;
     }
     notifyListeners();
   }
 
   int getItemQuantity(CatalogItem item) {
-    return _itemQuantities[item.id] ?? 0;
+    return _items[item.id] ?? 0;
   }
 
   bool isInCart(CatalogItem item) {
