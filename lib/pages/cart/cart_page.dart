@@ -1,11 +1,9 @@
-import 'package:etrick/constants.dart';
 import 'package:etrick/models/cart_model.dart';
-import 'package:etrick/models/catalog_model.dart';
+import 'package:etrick/pages/checkout/checkout_page.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_item_detail.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:etrick/widgets/item_card.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
@@ -41,20 +39,20 @@ class _CartPageState extends State<CartPage> {
                         var item = cart.items[index];
                         return GestureDetector(
                           child: ItemCard(item: item),
-                          onTap: () => Navigator.push(
+                          onTap: () => Utils.showPageNoAnimation(
                             context,
-                            PageRouteBuilder(
-                              transitionDuration: Duration.zero,
-                              pageBuilder: (_, __, ___) => CatalogItemDetail(
-                                item: cart.cartToCatalog(item),
-                              ),
+                            CatalogItemDetail(
+                              item: cart.cartToCatalog(item),
                             ),
                           ),
                         );
                       }),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => context.go(Constants.checkoutLoc),
+                    onPressed: () => Utils.showPageNoAnimation(
+                      context,
+                      const CheckoutPage(),
+                    ),
                     child: Text(
                       'ОФОРМИТИ ЗАМОВЛЕННЯ · ${Utils.formatPrice(cart.totalPrice)}',
                       style: const TextStyle(fontSize: 18),

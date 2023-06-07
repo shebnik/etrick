@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:etrick/app_theme.dart';
 import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/cart_model.dart';
-import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/storage_service.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:flutter/material.dart';

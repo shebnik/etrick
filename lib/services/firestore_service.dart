@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
+import 'package:etrick/models/purchase.dart';
 import 'package:etrick/services/utils.dart';
 
 class FirestoreService {
@@ -65,4 +66,17 @@ class FirestoreService {
       return [];
     }
   }
+
+  static Future<bool> addPurchase(String uid, Purchase purchase) async {
+    try {
+      await _users.doc(uid).update({
+        'purchases': FieldValue.arrayUnion([purchase.toMap()])
+      });
+      return true;
+    } catch (e) {
+      Utils.log('[addPurchase] Error: $e');
+      return false;
+    }
+  }
+
 }

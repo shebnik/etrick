@@ -2,7 +2,6 @@ import 'package:etrick/constants.dart';
 import 'package:etrick/pages/auth/create_account_page.dart';
 import 'package:etrick/pages/auth/login_page.dart';
 import 'package:etrick/pages/auth/reset_password.dart';
-import 'package:etrick/pages/checkout/checkout_page.dart';
 import 'package:etrick/pages/home/home_page.dart';
 import 'package:etrick/pages/cart/cart_page.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/category_page.dart';
@@ -72,10 +71,10 @@ class AppRouter {
           ),
         );
       }).toList(),
-      GoRoute(
-        path: Constants.checkoutLoc,
-        builder: (context, routerState) => const CheckoutPage(),
-      ),
+      // GoRoute(
+      //   path: Constants.checkoutLoc,
+      //   builder: (context, routerState) => const CheckoutPage(),
+      // ),
     ],
     errorPageBuilder: (context, state) => MaterialPage<void>(
       key: state.pageKey,

@@ -1,8 +1,13 @@
-import 'package:etrick/constants.dart';
+import 'dart:math';
+
 import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/models/purchase.dart';
+import 'package:etrick/services/auth_service.dart';
+import 'package:etrick/services/firestore_service.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:etrick/widgets/item_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -18,11 +23,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
     var cart = context.watch<CartModel>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Кошик'),
+        title: const Text('Оформлення замовлення'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListView.builder(
                 shrinkWrap: true,
@@ -35,16 +41,30 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   );
                 }),
             const SizedBox(height: 16),
-            Divider(),
-            Text('Сума до сплати · ${Utils.formatPrice(cart.totalPrice)}'),
-            Divider(),
+            const Divider(),
+            Text(
+              'Сума до сплати · ${Utils.formatPrice(cart.totalPrice)}',
+              textAlign: TextAlign.start,
+            ),
+            const Divider(),
             ElevatedButton(
-              onPressed: () => {
-                // TODO: Add order to database
+              onPressed: () {
+                FirestoreService.addPurchase(
+                  context.read<AuthService>().user!.uid,
+                  Purchase(
+                    purchaseId: Random().nextInt(1000000).toString(),
+                    products: cart.items,
+                    totalPrice: cart.totalPrice,
+                  ),
+                );
+                cart.clear();
+                while (context.canPop()) {
+                  context.pop();
+                }
               },
-              child: Text(
+              child: const Text(
                 'ЗАМОВЛЕННЯ ПІДТВЕРДЖУЮ',
-                style: const TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18),
               ),
             ),
           ],

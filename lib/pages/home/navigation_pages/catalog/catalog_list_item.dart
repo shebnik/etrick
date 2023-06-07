@@ -30,12 +30,9 @@ class _CatalogListItemState extends State<CatalogListItem> {
     );
 
     return GestureDetector(
-      onTap: () => Navigator.push(
+      onTap: () => Utils.showPageNoAnimation(
         context,
-        PageRouteBuilder(
-          transitionDuration: Duration.zero,
-          pageBuilder: (_, __, ___) => CatalogItemDetail(item: item),
-        ),
+        CatalogItemDetail(item: item),
       ),
       child: Card(
         child: Padding(

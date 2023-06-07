@@ -35,6 +35,16 @@ class Utils {
     }
   }
 
+  static showPageNoAnimation(BuildContext context, Widget page) {
+    return Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration.zero,
+        pageBuilder: (_, __, ___) => page,
+      ),
+    );
+  }
+
   static String capitalize(String color) {
     // capitalize all words in string
     return color.split(' ').map((word) {

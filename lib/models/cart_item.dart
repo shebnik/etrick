@@ -9,7 +9,6 @@ class CartItem {
   int quantity;
   double price;
   String color;
-  String description;
 
   CartItem({
     required this.id,
@@ -18,7 +17,6 @@ class CartItem {
     required this.quantity,
     required this.price,
     required this.color,
-    required this.description,
   });
 
   factory CartItem.fromCatalogItem(CatalogItem item) {
@@ -29,7 +27,6 @@ class CartItem {
       price: item.price,
       color: item.colors.first,
       category: item.category,
-      description: item.description,
     );
   }
 
@@ -40,7 +37,6 @@ class CartItem {
     int? quantity,
     double? price,
     String? color,
-    String? description,
   }) {
     return CartItem(
       id: id ?? this.id,
@@ -49,7 +45,6 @@ class CartItem {
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       color: color ?? this.color,
-      description: description ?? this.description,
     );
   }
 
@@ -61,7 +56,6 @@ class CartItem {
       'quantity': quantity,
       'price': price,
       'color': color,
-      'description': description,
     };
   }
 
@@ -73,7 +67,6 @@ class CartItem {
       quantity: map['quantity'],
       price: map['price'],
       color: map['color'],
-      description: map['description'],
     );
   }
 

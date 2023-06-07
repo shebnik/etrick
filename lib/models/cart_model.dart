@@ -104,4 +104,9 @@ class CartModel extends ChangeNotifier {
     saveCart();
     super.notifyListeners();
   }
+
+  void clear() {
+    _items.clear();
+    notifyListeners();
+  }
 }

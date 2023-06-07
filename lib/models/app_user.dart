@@ -1,3 +1,5 @@
+import 'package:etrick/models/purchase.dart';
+
 class AppUser {
   final String id;
   final String email;
@@ -5,6 +7,7 @@ class AppUser {
   final String lastName;
   final String? phoneNumber;
   final String? photoUrl;
+  final List<Purchase>? purchases;
 
   AppUser({
     required this.id,
@@ -13,33 +16,12 @@ class AppUser {
     required this.lastName,
     this.phoneNumber,
     this.photoUrl,
+    this.purchases,
   });
-
-  factory AppUser.fromMap(Map<String, dynamic> data) {
-    return AppUser(
-      id: data['id'],
-      email: data['email'],
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-      phoneNumber: data['phoneNumber'],
-      photoUrl: data['photoUrl'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'phoneNumber': phoneNumber,
-      'photoUrl': photoUrl,
-    };
-  }
 
   @override
   String toString() {
-    return 'AppUser{id: $id, email: $email, firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, photoUrl: $photoUrl}';
+    return 'AppUser{id: $id, email: $email, firstName: $firstName, lastName: $lastName, phoneNumber: $phoneNumber, photoUrl: $photoUrl, purchases: $purchases}';
   }
 
   AppUser copyWith({
@@ -49,6 +31,7 @@ class AppUser {
     String? lastName,
     String? phoneNumber,
     String? photoUrl,
+    List<Purchase>? purchases,
   }) {
     return AppUser(
       id: id ?? this.id,
@@ -57,6 +40,7 @@ class AppUser {
       lastName: lastName ?? this.lastName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
+      purchases: purchases ?? this.purchases,
     );
   }
 
@@ -68,6 +52,32 @@ class AppUser {
       lastName: '',
       phoneNumber: '',
       photoUrl: '',
+      purchases: [],
     );
   }
+
+  factory AppUser.fromMap(Map<String, dynamic> map) {
+    return AppUser(
+      id: map['id'],
+      email: map['email'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      phoneNumber: map['phoneNumber'],
+      photoUrl: map['photoUrl'],
+      purchases: List<Purchase>.from(
+          map['purchases']?.map((x) => Purchase.fromMap(x))),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneNumber': phoneNumber,
+      'photoUrl': photoUrl,
+      'purchases': purchases?.map((x) => x.toMap()).toList(),
+    };
+  } 
 }

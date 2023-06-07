@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:etrick/models/cart_item.dart';
 import 'package:flutter/foundation.dart';
-// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 class CatalogModel extends ChangeNotifier {
