@@ -6,7 +6,7 @@ import 'package:etrick/providers/theme_provider.dart';
 import 'package:etrick/services/app_router.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/app_theme.dart';
-import 'package:etrick/services/firestore_service.dart';
+import 'package:etrick/services/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -73,14 +73,7 @@ class _MyAppState extends State<MyApp> {
         authService.authStateChanges.toValueNotifier(authService.user);
     super.initState();
     if (userChanges.value != null && userChanges.value!.uid.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        context.read<AppUserModel>().user = await FirestoreService.getUserById(
-          userChanges.value!.uid,
-        );
-        if (!mounted) return;
-        context.read<CatalogModel>().items =
-            await FirestoreService.getCatalog();
-      });
+      Utils.fetchData(context);
     }
   }
 

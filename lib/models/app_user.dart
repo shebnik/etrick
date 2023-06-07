@@ -11,7 +11,6 @@ class AppUserModel extends ChangeNotifier {
 
   set user(AppUser? user) {
     _user = user;
-    print(_user.toString());
     notifyListeners();
   }
 

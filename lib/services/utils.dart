@@ -1,5 +1,10 @@
+import 'package:etrick/models/app_user.dart';
+import 'package:etrick/models/catalog_model.dart';
+import 'package:etrick/services/auth_service.dart';
+import 'package:etrick/services/firestore_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Utils {
   static String formatPrice(double value) =>
@@ -69,5 +74,15 @@ class Utils {
       return true;
     }
     return false;
+  }
+
+  static void fetchData(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final appUserModel = context.read<AppUserModel>();
+      final auth = context.read<AuthService>();
+      final catalog = context.read<CatalogModel>();
+      appUserModel.user = await FirestoreService.getUserById(auth.user!.uid);
+      catalog.items = await FirestoreService.getCatalog();
+    });
   }
 }

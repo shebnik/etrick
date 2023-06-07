@@ -1,11 +1,10 @@
-import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/models/tab_item.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_page.dart';
 import 'package:etrick/pages/home/navigation_pages/home_main/home_main_page.dart';
 import 'package:etrick/pages/home/navigation_pages/profile/profile_page.dart';
 import 'package:etrick/services/auth_service.dart';
-import 'package:etrick/services/firestore_service.dart';
+import 'package:etrick/services/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -94,6 +93,10 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthService>();
+    final catalog = context.watch<CatalogModel>();
+    Utils.log(auth.user!.uid);
+    Utils.log(catalog.items.length.toString());
     return Scaffold(
       appBar: const HomeAppBar(),
       body: _buildBody(),

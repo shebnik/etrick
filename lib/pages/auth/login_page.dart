@@ -1,6 +1,7 @@
 import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/app_user.dart';
+import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/services/firestore_service.dart';
 import 'package:etrick/widgets/logo_widget.dart';
@@ -55,7 +56,10 @@ class _LoginPageState extends State<LoginPage> {
 
     final String email = emailController.text.trim();
     final String password = passwordController.text;
-    final result = await context.read<AuthService>().login(email, password);
+    final appUserModel = context.read<AppUserModel>();
+    final auth = context.read<AuthService>();
+    final catalog = context.read<CatalogModel>();
+    final result = await auth.login(email, password);
 
     bool success = result.keys.first;
     String e = result.values.first;
@@ -63,14 +67,13 @@ class _LoginPageState extends State<LoginPage> {
       // show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text(context.read<AuthService>().getFirebaseAuthErrorMessage(e)),
+          content: Text(auth.getFirebaseAuthErrorMessage(e)),
         ),
       );
     }
-    if (!mounted) return;
-    context.read<AppUserModel>().user = await FirestoreService.getUserById(
-        context.read<AuthService>().user!.uid);
+
+    appUserModel.user = await FirestoreService.getUserById(auth.user!.uid);
+    catalog.items = await FirestoreService.getCatalog();
   }
 
   @override

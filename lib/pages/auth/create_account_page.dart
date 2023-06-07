@@ -1,6 +1,7 @@
 import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/app_user.dart';
+import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/services/firestore_service.dart';
 import 'package:etrick/widgets/logo_widget.dart';
@@ -72,6 +73,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     final String email = emailController.text.trim();
     final String password = passwordController.text;
 
+    final appUserModel = context.read<AppUserModel>();
+    final auth = context.read<AuthService>();
+    final catalog = context.read<CatalogModel>();
+
     final result = await context.read<AuthService>().createAccount(
           AppUser(
             firstName: firstName,
@@ -88,14 +93,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       // show snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content:
-              Text(context.read<AuthService>().getFirebaseAuthErrorMessage(e)),
+          content: Text(auth.getFirebaseAuthErrorMessage(e)),
         ),
       );
     }
-    if (!mounted) return;
-    context.read<AppUserModel>().user = await FirestoreService.getUserById(
-        context.read<AuthService>().user!.uid);
+    appUserModel.user = await FirestoreService.getUserById(auth.user!.uid);
+    catalog.items = await FirestoreService.getCatalog();
   }
 
   @override
@@ -122,7 +125,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   errorText:
                       value ? 'Будь ласка, введіть правильне ім\'я' : null,
                   labelText: 'Ім\'я',
-                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
@@ -135,7 +137,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   errorText:
                       value ? 'Будь ласка, введіть правильне прізвище' : null,
                   labelText: 'Прізвище',
-                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
@@ -148,7 +149,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   errorText:
                       value ? 'Будь ласка, введіть правильний email' : null,
                   labelText: 'Email',
-                  border: const OutlineInputBorder(),
                 ),
               ),
             ),
@@ -166,7 +166,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         ? 'Будь ласка, введіть пароль (мін. 8 символів)'
                         : null,
                     labelText: 'Пароль',
-                    border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       onPressed: _toggleObscurePassword,
                       icon: Icon(
