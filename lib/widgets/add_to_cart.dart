@@ -2,6 +2,7 @@ import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/widgets/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -40,22 +41,7 @@ class AddToCart extends StatelessWidget {
             : () {
                 context.read<CartModel>().add(item);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Товар додан у кошик',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    duration: Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                    margin: EdgeInsets.all(16),
-                    backgroundColor: AppTheme.primaryColor,
-                  ),
+                  AppSnakbar(text: 'Товар додаий у кошик').snackbar,
                 );
               },
       ),

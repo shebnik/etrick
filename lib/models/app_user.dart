@@ -11,6 +11,7 @@ class AppUserModel extends ChangeNotifier {
 
   set user(AppUser? user) {
     _user = user;
+    saveUser();
     notifyListeners();
   }
 
@@ -106,7 +107,7 @@ class AppUser {
       'lastName': lastName,
       'phoneNumber': phoneNumber,
       'photoUrl': photoUrl,
-      'purchases': purchases?.map((x) => x.toMap()).toList(),
+      'purchases': purchases.map((x) => x.toMap()).toList(),
     };
   }
 }

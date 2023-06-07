@@ -20,6 +20,9 @@ class AppTheme {
 
   static get lightTheme => ThemeData.light().copyWith(
         primaryColor: primaryColor,
+        radioTheme: RadioThemeData(
+          fillColor: MaterialStateProperty.all(primaryColor),
+        ),
         pageTransitionsTheme: PageTransitionsTheme(
           builders: {
             TargetPlatform.android: NoTransitionsBuilder(),
@@ -32,7 +35,19 @@ class AppTheme {
           elevation: 5,
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AppTheme.primaryColor,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
+            ),
+          ),
           labelStyle: TextStyle(
             color: Colors.black,
           ),

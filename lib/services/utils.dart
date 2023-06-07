@@ -56,4 +56,18 @@ class Utils {
 
   // ignore: avoid_print
   static log(String message) => kDebugMode ? print(message) : null;
+
+  static bool validateAddress(String text) {
+    if (text.length < 5) {
+      return false;
+    }
+    return true;
+  }
+
+  static bool validatePhoneNumber(String text) {
+    if (text.length == 9) {
+      return true;
+    }
+    return false;
+  }
 }

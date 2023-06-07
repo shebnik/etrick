@@ -2,7 +2,9 @@ import 'package:etrick/models/tab_item.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_page.dart';
 import 'package:etrick/pages/home/navigation_pages/home_main_page.dart';
 import 'package:etrick/pages/home/navigation_pages/profile_page.dart';
+import 'package:etrick/providers/bottom_navigation_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final List<TabItem> tabBar = [
   TabItem(
@@ -52,10 +54,9 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar>
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: _selectedIndex,
-      builder: (_, value, __) => BottomNavigationBar(
-        currentIndex: value,
+    return Consumer<BottomNavigationProvider>(
+      builder: (_, provider, __) => BottomNavigationBar(
+        currentIndex: provider.currentIndex,
         onTap: (index) {
           _tabController.animateTo(index);
           _selectedIndex.value = index;
