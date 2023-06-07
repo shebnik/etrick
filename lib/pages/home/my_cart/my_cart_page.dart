@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
+import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/storage_service.dart';
@@ -35,104 +37,12 @@ class _CartPageState extends State<CartPage> {
               child: Column(
                 children: [
                   ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: cart.items.length,
-                    itemBuilder: (context, index) {
-                      var item = cart.items[index];
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(width: 16),
-                                  FutureBuilder(
-                                    future: StorageService.getPicture(
-                                      item: CatalogItem.fromCartItem(item),
-                                      pictureId: 0,
-                                      quality: PictureQuality.low,
-                                    ),
-                                    builder: (context, snapshot) => snapshot
-                                            .hasData
-                                        ? CachedNetworkImage(
-                                            height: 100,
-                                            imageUrl: snapshot.data as String,
-                                            placeholder: (context, url) =>
-                                                const SizedBox.shrink(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                          )
-                                        : const SizedBox.shrink(),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 32.0),
-                                      child: Text(item.name),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    padding: EdgeInsets.zero,
-                                    constraints: const BoxConstraints(),
-                                    splashRadius: 16,
-                                    icon:
-                                        const Icon(Icons.remove_circle_outline),
-                                    onPressed: () {
-                                      cart.remove(item);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        padding: EdgeInsets.zero,
-                                        constraints: const BoxConstraints(),
-                                        splashRadius: 16,
-                                        icon: const Icon(Icons.remove),
-                                        onPressed: () {
-                                          if (item.quantity > 1) {
-                                            cart.decrement(item);
-                                          }
-                                        },
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Text(
-                                        cart.getItemQuantity(item).toString(),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      IconButton(
-                                        padding: EdgeInsets.zero,
-                                        constraints: const BoxConstraints(),
-                                        splashRadius: 16,
-                                        icon: const Icon(Icons.add),
-                                        onPressed: () {
-                                          cart.increment(item);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    Utils.formatPrice(item.price),
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                      shrinkWrap: true,
+                      itemCount: cart.items.length,
+                      itemBuilder: (context, index) {
+                        var item = cart.items[index];
+                        return itemCard(item);
+                      }),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => context.go(Constants.checkoutLoc),
@@ -144,6 +54,112 @@ class _CartPageState extends State<CartPage> {
                 ],
               ),
             ),
+    );
+  }
+
+  Widget itemCard(CartItem item) {
+    var cart = context.watch<CartModel>();
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    itemPreview(item),
+                    itemQuantity(item),
+                  ],
+                ),
+                Flexible(
+                  child: Text(
+                    item.name,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 16,
+                  icon: const Icon(Icons.remove_circle_outline),
+                  onPressed: () {
+                    cart.remove(item);
+                  },
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Text(
+                Utils.formatPrice(item.price),
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget itemPreview(CartItem item) => FutureBuilder(
+        future: StorageService.getPicture(
+          item: CatalogItem.fromCartItem(item),
+          pictureId: 0,
+          quality: PictureQuality.low,
+        ),
+        builder: (context, snapshot) => snapshot.hasData
+            ? CachedNetworkImage(
+                height: 100,
+                imageUrl: snapshot.data as String,
+                placeholder: (context, url) => const SizedBox.shrink(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              )
+            : const SizedBox.shrink(),
+      );
+
+  Widget itemQuantity(CartItem item) {
+    var cart = context.watch<CartModel>();
+    return Row(
+      children: [
+        IconButton(
+          padding: EdgeInsets.zero,
+          iconSize: 32,
+          constraints: const BoxConstraints(),
+          splashRadius: 16,
+          icon: const Icon(
+            Icons.remove,
+            color: AppTheme.primaryColor,
+          ),
+          onPressed: () {
+            if (item.quantity > 1) {
+              cart.decrement(item);
+            }
+          },
+        ),
+        const SizedBox(width: 16),
+        Text(
+          cart.getItemQuantity(item).toString(),
+          style: const TextStyle(fontSize: 18),
+        ),
+        const SizedBox(width: 16),
+        IconButton(
+          padding: EdgeInsets.zero,
+          iconSize: 32,
+          constraints: const BoxConstraints(),
+          splashRadius: 16,
+          icon: const Icon(
+            Icons.add,
+            color: AppTheme.primaryColor,
+          ),
+          onPressed: () {
+            cart.increment(item);
+          },
+        ),
+      ],
     );
   }
 }
