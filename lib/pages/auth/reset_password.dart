@@ -1,5 +1,7 @@
+import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
 import 'package:etrick/services/auth_service.dart';
+import 'package:etrick/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -67,52 +69,41 @@ class _ResetPasswordState extends State<ResetPassword> {
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20,
+            horizontal: 16,
             vertical: 40,
           ),
           children: [
-            Column(
-              children: [
-                Image.asset(
-                  'assets/images/logo.png',
-                  width: 200,
-                  height: 200,
+            const LogoWidget(),
+            const SizedBox(height: 32),
+            ValueListenableBuilder(
+              valueListenable: isEmailError,
+              builder: (context, error, _) {
+                return TextField(
+                  controller: emailTextFieldController,
+                  decoration: InputDecoration(
+                    labelText: 'Електронна адреса',
+                    errorText: error
+                        ? 'Будь ласка, введіть коректну адресу'
+                        : null,
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _resetPassword,
+              child: const Text('Відновити пароль'),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: _login,
+              child: const Text(
+                'Увійти',
+                style: TextStyle(
+                  color: AppTheme.primaryColor,
+                  decoration: TextDecoration.underline,
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  'ETRICK',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 32,
-                      ),
-                ),
-                const SizedBox(height: 20),
-                ValueListenableBuilder(
-                  valueListenable: isEmailError,
-                  builder: (context, error, _) {
-                    return TextField(
-                      controller: emailTextFieldController,
-                      decoration: InputDecoration(
-                        labelText: 'Електронна адреса',
-                        errorText: error
-                            ? 'Будь ласка, введіть коректну адресу'
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _resetPassword,
-                  child: const Text('Відновити пароль'),
-                ),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: _login,
-                  child: const Text('Увійти'),
-                ),
-              ],
+              ),
             ),
           ],
         ),

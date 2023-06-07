@@ -1,8 +1,10 @@
+import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/models/tab_item.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_page.dart';
 import 'package:etrick/pages/home/navigation_pages/home_main_page.dart';
 import 'package:etrick/pages/home/navigation_pages/profile_page.dart';
+import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,9 +56,12 @@ class _HomePageState extends State<HomePage>
     });
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      context.read<AppUserModel>().user = await FirestoreService.getUserById(
+        context.read<AuthService>().user!.uid,
+      );
+      if (!mounted) return;
       context.read<CatalogModel>().items = await FirestoreService.getCatalog();
     });
-
   }
 
   void _onItemTapped(int index) {

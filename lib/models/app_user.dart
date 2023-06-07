@@ -1,4 +1,33 @@
+import 'dart:convert';
+
 import 'package:etrick/models/purchase.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class AppUserModel extends ChangeNotifier {
+  AppUser? _user;
+
+  AppUser? get user => _user;
+
+  set user(AppUser? user) {
+    _user = user;
+    notifyListeners();
+  }
+
+  Future<void> loadUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? savedUser = prefs.getString('user');
+    if (savedUser != null) {
+      _user = AppUser.fromMap(jsonDecode(savedUser));
+      notifyListeners();
+    }
+  }
+
+  Future<void> saveUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', jsonEncode(_user?.toMap()));
+  }
+}
 
 class AppUser {
   final String id;
@@ -7,7 +36,7 @@ class AppUser {
   final String lastName;
   final String? phoneNumber;
   final String? photoUrl;
-  final List<Purchase>? purchases;
+  final List<Purchase> purchases;
 
   AppUser({
     required this.id,
@@ -16,7 +45,7 @@ class AppUser {
     required this.lastName,
     this.phoneNumber,
     this.photoUrl,
-    this.purchases,
+    this.purchases = const [],
   });
 
   @override
@@ -79,5 +108,5 @@ class AppUser {
       'photoUrl': photoUrl,
       'purchases': purchases?.map((x) => x.toMap()).toList(),
     };
-  } 
+  }
 }

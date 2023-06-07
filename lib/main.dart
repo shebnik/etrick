@@ -1,3 +1,4 @@
+import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/providers/theme_provider.dart';
@@ -27,7 +28,12 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => AppThemeProvider(),
         ),
-        ChangeNotifierProvider(create: (_) => CatalogModel(items: [])),
+        ChangeNotifierProvider(
+          create: (_) => AppUserModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CatalogModel(items: []),
+        ),
         ChangeNotifierProxyProvider<CatalogModel, CartModel>(
           create: (_) => CartModel(),
           update: (_, catalog, cart) {

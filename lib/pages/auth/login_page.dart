@@ -1,5 +1,8 @@
+import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
+import 'package:etrick/models/app_user.dart';
 import 'package:etrick/services/auth_service.dart';
+import 'package:etrick/services/firestore_service.dart';
 import 'package:etrick/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -65,6 +68,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
     }
+    if (!mounted) return;
+    context.read<AppUserModel>().user = await FirestoreService.getUserById(
+        context.read<AuthService>().user!.uid);
   }
 
   @override
@@ -74,109 +80,113 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text('Увійти'),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              const LogoWidget(),
-              const SizedBox(height: 16),
-              ValueListenableBuilder<bool>(
-                valueListenable: isEmailError,
-                builder: (context, value, child) {
-                  return TextField(
-                    controller: emailController,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 40,
+          ),
+          children: [
+            const LogoWidget(),
+            const SizedBox(height: 32.0),
+            ValueListenableBuilder<bool>(
+              valueListenable: isEmailError,
+              builder: (context, value, child) {
+                return TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Електронна пошта',
+                    errorText: value ? 'Некоректна пошта' : null,
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 8.0),
+            ValueListenableBuilder<bool>(
+              valueListenable: isPasswordError,
+              builder: (context, error, child) {
+                return ValueListenableBuilder(
+                  valueListenable: isPasswordVisible,
+                  builder: (context, visible, child) => TextField(
+                    controller: passwordController,
+                    obscureText: !visible,
                     decoration: InputDecoration(
-                      labelText: 'Електронна пошта',
-                      errorText: value ? 'Некоректна пошта' : null,
+                      labelText: 'Пароль',
+                      errorText: error ? 'Некоректний пароль' : null,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                            visible ? Icons.visibility : Icons.visibility_off),
+                        onPressed: _toggleObscurePassword,
+                      ),
                     ),
-                  );
-                },
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 24.0),
+            ElevatedButton(
+              onPressed: _login,
+              child: const Text('Увійти'),
+            ),
+            const SizedBox(height: 16.0),
+            TextButton(
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go(Constants.createAccountLoc);
+                }
+              },
+              child: const Text(
+                'Зареєструватися',
+                style: TextStyle(
+                  color: AppTheme.primaryColor,
+                  decoration: TextDecoration.underline,
+                ),
               ),
-              const SizedBox(height: 16),
-              ValueListenableBuilder<bool>(
-                valueListenable: isPasswordError,
-                builder: (context, error, child) {
-                  return ValueListenableBuilder(
-                    valueListenable: isPasswordVisible,
-                    builder: (context, visible, child) => TextField(
-                      controller: passwordController,
-                      obscureText: !visible,
-                      decoration: InputDecoration(
-                        labelText: 'Пароль',
-                        errorText: error ? 'Некоректний пароль' : null,
-                        suffixIcon: IconButton(
-                          icon: Icon(visible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          onPressed: _toggleObscurePassword,
+            ),
+            const SizedBox(height: 32.0),
+            Align(
+              alignment: Alignment.centerRight,
+              child: RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.normal,
+                      ),
+                  children: [
+                    const TextSpan(
+                      text: 'Забули пароль?',
+                    ),
+                    const WidgetSpan(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 4),
+                      ),
+                    ),
+                    WidgetSpan(
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            context.go(Constants.resetPasswordLoc);
+                          },
+                          child: Text(
+                            'Відновити тут',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.primaryColor,
+                                  decoration: TextDecoration.underline,
+                                ),
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Увійти'),
-              ),
-              const SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  if (context.canPop()) {
-                    context.pop();
-                  } else {
-                    context.go(Constants.createAccountLoc);
-                  }
-                },
-                child: const Text('Зареєструватися'),
-              ),
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 26),
-                  child: RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontWeight: FontWeight.normal,
-                          ),
-                      children: [
-                        const TextSpan(
-                          text: 'Забули пароль?',
-                        ),
-                        const WidgetSpan(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 4),
-                          ),
-                        ),
-                        WidgetSpan(
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () {
-                                context.go(Constants.resetPasswordLoc);
-                              },
-                              child: Text(
-                                'Відновити',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

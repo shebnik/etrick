@@ -6,20 +6,22 @@ class LogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var logoSize = width * 0.5;
     return Column(
       children: [
         Image.asset(
           Constants.logoAssetPath,
-          width: 200,
-          height: 200,
+          width: logoSize,
+          height: logoSize,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
         Text(
-          'ETRICK',
+          'eTRICK',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 64,
+                fontSize: logoSize * 0.2,
               ),
           textAlign: TextAlign.center,
         ),

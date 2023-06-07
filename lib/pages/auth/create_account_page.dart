@@ -1,6 +1,8 @@
+import 'package:etrick/app_theme.dart';
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/services/auth_service.dart';
+import 'package:etrick/services/firestore_service.dart';
 import 'package:etrick/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -71,14 +73,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     final String password = passwordController.text;
 
     final result = await context.read<AuthService>().createAccount(
-      AppUser(
-        firstName: firstName,
-        lastName: lastName,
-        id: '',
-        email: email,
-      ),
-      password,
-    );
+          AppUser(
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            id: '',
+          ),
+          password,
+        );
 
     bool success = result.keys.first;
     String e = result.values.first;
@@ -91,6 +93,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ),
       );
     }
+    if (!mounted) return;
+    context.read<AppUserModel>().user = await FirestoreService.getUserById(
+        context.read<AuthService>().user!.uid);
   }
 
   @override
@@ -101,97 +106,96 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 16.0),
-                const LogoWidget(),
-                const SizedBox(height: 16.0),
-                ValueListenableBuilder(
-                  valueListenable: isFirstNameError,
-                  builder: (context, value, child) => TextField(
-                    controller: firstNameController,
-                    decoration: InputDecoration(
-                      errorText:
-                          value ? 'Будь ласка, введіть правильне ім\'я' : null,
-                      labelText: 'Ім\'я',
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 40,
+          ),
+          children: [
+            const LogoWidget(),
+            const SizedBox(height: 32.0),
+            ValueListenableBuilder(
+              valueListenable: isFirstNameError,
+              builder: (context, value, child) => TextField(
+                controller: firstNameController,
+                decoration: InputDecoration(
+                  errorText:
+                      value ? 'Будь ласка, введіть правильне ім\'я' : null,
+                  labelText: 'Ім\'я',
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: 16.0),
-                ValueListenableBuilder(
-                  valueListenable: isLastNameError,
-                  builder: (context, value, child) => TextField(
-                    controller: lastNameController,
-                    decoration: InputDecoration(
-                      errorText: value
-                          ? 'Будь ласка, введіть правильне прізвище'
-                          : null,
-                      labelText: 'Прізвище',
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            ValueListenableBuilder(
+              valueListenable: isLastNameError,
+              builder: (context, value, child) => TextField(
+                controller: lastNameController,
+                decoration: InputDecoration(
+                  errorText:
+                      value ? 'Будь ласка, введіть правильне прізвище' : null,
+                  labelText: 'Прізвище',
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: 16.0),
-                ValueListenableBuilder(
-                  valueListenable: isEmailError,
-                  builder: (context, value, child) => TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      errorText:
-                          value ? 'Будь ласка, введіть правильний email' : null,
-                      labelText: 'Email',
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            ValueListenableBuilder(
+              valueListenable: isEmailError,
+              builder: (context, value, child) => TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  errorText:
+                      value ? 'Будь ласка, введіть правильний email' : null,
+                  labelText: 'Email',
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: 16.0),
-                ValueListenableBuilder(
-                  valueListenable: isPasswordError,
-                  builder: (context, passwordError, child) =>
-                      ValueListenableBuilder(
-                    valueListenable: isPasswordVisible,
-                    builder: (context, visible, child) => TextField(
-                      controller: passwordController,
-                      obscureText: !visible,
-                      decoration: InputDecoration(
-                        errorText: passwordError
-                            ? 'Будь ласка, введіть пароль (мін. 8 символів)'
-                            : null,
-                        labelText: 'Пароль',
-                        border: const OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          onPressed: _toggleObscurePassword,
-                          icon: Icon(
-                            visible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                        ),
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            ValueListenableBuilder(
+              valueListenable: isPasswordError,
+              builder: (context, passwordError, child) =>
+                  ValueListenableBuilder(
+                valueListenable: isPasswordVisible,
+                builder: (context, visible, child) => TextField(
+                  controller: passwordController,
+                  obscureText: !visible,
+                  decoration: InputDecoration(
+                    errorText: passwordError
+                        ? 'Будь ласка, введіть пароль (мін. 8 символів)'
+                        : null,
+                    labelText: 'Пароль',
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      onPressed: _toggleObscurePassword,
+                      icon: Icon(
+                        visible ? Icons.visibility : Icons.visibility_off,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _createAccount,
-                  child: const Text('Створити обліковий запис'),
-                ),
-                const SizedBox(height: 16.0),
-                TextButton(
-                  onPressed: () {
-                    context.go(Constants.loginLoc);
-                  },
-                  child: const Text(
-                    'Увійти',
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            const SizedBox(height: 24.0),
+            ElevatedButton(
+              onPressed: _createAccount,
+              child: const Text('Створити обліковий запис'),
+            ),
+            const SizedBox(height: 16.0),
+            TextButton(
+              onPressed: () {
+                context.go(Constants.loginLoc);
+              },
+              child: const Text(
+                'Увійти',
+                style: TextStyle(
+                  color: AppTheme.primaryColor,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
