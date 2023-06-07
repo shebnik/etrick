@@ -47,34 +47,36 @@ class _ItemPhotoSliderState extends State<ItemPhotoSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CarouselSlider(
-          options: CarouselOptions(
-            enlargeCenterPage: false,
-            enableInfiniteScroll: false,
-            initialPage: 0,
-            autoPlay: false,
-            onPageChanged: (index, reason) =>
-                currentCarouselIndex.value = index,
-          ),
-          items: List.generate(
-            photosCount,
-            (index) => FutureBuilder(
-              future: StorageService.getPicture(
-                item: item,
-                pictureId: index,
-                quality: quality,
-                color: widget.color,
-              ),
-              builder: (_, snapshot) => snapshot.data == null
-                  ? const SizedBox.shrink()
-                  : CachedNetworkImage(
-                      imageUrl: snapshot.data as String,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const SizedBox.shrink(),
-                      errorWidget: (context, url, error) => const Center(
-                        child: Icon(Icons.error),
+        Expanded(
+          child: CarouselSlider(
+            options: CarouselOptions(
+              enlargeCenterPage: false,
+              enableInfiniteScroll: false,
+              initialPage: 0,
+              autoPlay: false,
+              onPageChanged: (index, reason) =>
+                  currentCarouselIndex.value = index,
+            ),
+            items: List.generate(
+              photosCount,
+              (index) => FutureBuilder(
+                future: StorageService.getPicture(
+                  item: item,
+                  pictureId: index,
+                  quality: quality,
+                  color: widget.color,
+                ),
+                builder: (_, snapshot) => snapshot.data == null
+                    ? const SizedBox.shrink()
+                    : CachedNetworkImage(
+                        imageUrl: snapshot.data as String,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const SizedBox.shrink(),
+                        errorWidget: (context, url, error) => const Center(
+                          child: Icon(Icons.error),
+                        ),
                       ),
-                    ),
+              ),
             ),
           ),
         ),
