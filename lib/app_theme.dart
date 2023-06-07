@@ -14,7 +14,7 @@ class NoTransitionsBuilder extends PageTransitionsBuilder {
 }
 
 class AppTheme {
-  static const primaryColor = Color(0xFF396FE2);
+  static const primaryColor = Color(0xff5aa77f);
   static const lightBackgroundColor = Color(0xFAFAFAFA);
   static const primaryDark = Color(0xFF474747);
 
@@ -45,6 +45,7 @@ class AppTheme {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(primaryColor),
             minimumSize: MaterialStateProperty.all(
               const Size(double.infinity, 48),
             ),

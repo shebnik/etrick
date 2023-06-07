@@ -25,6 +25,11 @@ class CartModel extends ChangeNotifier {
         (total, item) => total + (item.price * item.quantity),
       );
 
+  CatalogItem cartToCatalog(CartItem item) {
+    return _catalog.items
+        .firstWhere((catalogItem) => catalogItem.id == item.id);
+  }
+
   Future<void> loadCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? savedCart = prefs.getStringList('cart');
@@ -86,8 +91,12 @@ class CartModel extends ChangeNotifier {
     return null;
   }
 
-  bool isInCart(CartItem item) {
-    return items.any((cartItem) => item.id == cartItem.id && item.color == cartItem.color);
+  bool isInCart(CartItem item, bool colorCheck) {
+    return items.any(
+      (cartItem) =>
+          item.id == cartItem.id &&
+          (colorCheck ? item.color == cartItem.color : true),
+    );
   }
 
   @override

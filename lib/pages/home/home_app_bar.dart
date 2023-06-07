@@ -35,7 +35,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   padding: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.green,
+                    color: Colors.white,
                   ),
                   constraints: const BoxConstraints(
                     minWidth: 16,
@@ -45,7 +45,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     cartItemsCount.toString(),
                     style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                     textAlign: TextAlign.center,
                   ),

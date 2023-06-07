@@ -50,16 +50,16 @@ class CatalogItem {
     required this.colors,
   });
 
-  factory CatalogItem.fromCartItem(CartItem item) {
-    return CatalogItem(
-      id: item.id,
-      name: item.name,
-      description: item.description,
-      price: item.price,
-      category: item.category,
-      colors: [item.color],
-    );
-  }
+  // factory CatalogItem.fromCartItem(CartItem item) {
+  //   return CatalogItem(
+  //     id: item.id,
+  //     name: item.name,
+  //     description: item.description,
+  //     price: item.price,
+  //     category: item.category,
+  //     colors: [item.color],
+  //   );
+  // }
 
   CatalogItem copyWith({
     String? id,

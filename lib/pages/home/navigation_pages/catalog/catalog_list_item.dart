@@ -1,6 +1,6 @@
 import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/catalog_model.dart';
-import 'package:etrick/pages/home/navigation_pages/catalog/add_to_cart.dart';
+import 'package:etrick/widgets/add_to_cart.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_item_detail.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/item_photo_slider.dart';
 import 'package:etrick/services/storage_service.dart';
@@ -59,7 +59,7 @@ class _CatalogListItemState extends State<CatalogListItem> {
                 ),
                 textAlign: TextAlign.left,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Text(
                 Utils.formatPrice(item.price),
                 style: const TextStyle(
@@ -69,7 +69,10 @@ class _CatalogListItemState extends State<CatalogListItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  AddToCart(item: CartItem.fromCatalogItem(item)),
+                  AddToCart(
+                    item: CartItem.fromCatalogItem(item),
+                    colorCheck: false,
+                  ),
                 ],
               ),
             ],
