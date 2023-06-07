@@ -17,7 +17,19 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     var cart = context.watch<CartModel>();
     int cartItemsCount = cart.getItemsCount();
     return AppBar(
-      title: Text(title),
+      title: context.canPop()
+          ? Text(title)
+          : Row(
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  width: 40,
+                  height: 40,
+                ),
+                const SizedBox(width: 8),
+                Text(title),
+              ],
+            ),
       actions: [
         Stack(
           children: [

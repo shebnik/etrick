@@ -23,7 +23,7 @@ class FirestoreService {
             fromFirestore: (snapshot, _) =>
                 CatalogItem.fromMap(snapshot.data() as Map<String, dynamic>),
             toFirestore: (catalogItem, _) => catalogItem.toMap(),
-          );
+          );  
 
   static Future<bool> updateUser(AppUser user) {
     return _users
@@ -36,7 +36,7 @@ class FirestoreService {
     });
   }
 
-  static Future<AppUser?> getUserById(String uid) {
+  static Future<AppUser?> getUserById(dynamic uid) {
     return _users
         .doc(uid)
         .get()

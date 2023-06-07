@@ -24,7 +24,7 @@ class Purchase {
       purchaseId: map['purchaseId'] as String,
       products: List<CartItem>.from(
           (map['products'] as List).map((e) => CartItem.fromMap(e))),
-      totalPrice: map['totalPrice'] as double,
+      totalPrice: map['totalPrice'].toDouble() as double,
       selfDelivery: map['selfDelivery'] as bool,
       address: map['address'] as String,
       comment: map['comment'] as String,

@@ -55,18 +55,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
     }
     if (!mounted) return;
     var cart = context.read<CartModel>();
-    await FirestoreService.addPurchase(
-      userModel.user!.id,
-      Purchase(
-        purchaseId: Random().nextInt(1000000).toString(),
-        products: cart.items,
-        totalPrice: cart.totalPrice,
-        selfDelivery: selfDelivery.value,
-        address: addressController.text == ''
-            ? 'Cамовивіз м. Миколаїв, вул. Новобузька 128'
-            : addressController.text.trim(),
-      ),
+    final purchase = Purchase(
+      purchaseId: Random().nextInt(1000000).toString(),
+      products: cart.items,
+      totalPrice: cart.totalPrice,
+      selfDelivery: selfDelivery.value,
+      address: addressController.text == ''
+          ? 'Cамовивіз м. Миколаїв, вул. Новобузька 128'
+          : addressController.text.trim(),
     );
+    userModel.user = userModel.user!.copyWith(
+      purchases: [...userModel.user!.purchases, purchase],
+    );
+    await FirestoreService.addPurchase(userModel.user!.id, purchase);
     cart.clear();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

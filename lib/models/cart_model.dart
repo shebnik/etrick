@@ -16,6 +16,12 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
+  void notifyListeners() {
+    saveCart();
+    super.notifyListeners();
+  }
+
   List<CartItem> get items => _items;
 
   int getItemsCount() => items.fold(0, (total, item) => total + item.quantity);
@@ -97,12 +103,6 @@ class CartModel extends ChangeNotifier {
           item.id == cartItem.id &&
           (colorCheck ? item.color == cartItem.color : true),
     );
-  }
-
-  @override
-  void notifyListeners() {
-    saveCart();
-    super.notifyListeners();
   }
 
   void clear() {

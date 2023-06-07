@@ -11,8 +11,14 @@ class AppUserModel extends ChangeNotifier {
 
   set user(AppUser? user) {
     _user = user;
-    saveUser();
+    print(_user.toString());
     notifyListeners();
+  }
+
+  @override
+  void notifyListeners() {
+    saveUser();
+    super.notifyListeners();
   }
 
   Future<void> loadUser() async {

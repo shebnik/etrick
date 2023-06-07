@@ -65,7 +65,7 @@ class CartItem {
       category: map['category'],
       name: map['name'],
       quantity: map['quantity'],
-      price: map['price'],
+      price: map['price'].toDouble(),
       color: map['color'],
     );
   }

@@ -8,6 +8,7 @@ class Constants {
   static const resetPasswordLoc = '/reset-password';
   static const cartLoc = '/cart';
   static const checkoutLoc = '/checkout';
+  static const profileEditLoc = '/profile-edit';
 
   static const Map<String, String> categories = {
     'headsets': 'Bluetooth-гарнітури',
@@ -17,7 +18,6 @@ class Constants {
     'auto_holders': 'Тримачі',
     // 'cables': 'Кабелі',
   };
-
 
   static String getCategoryAsset(String category) =>
       'assets/images/categories/$category.jpg';
