@@ -30,9 +30,10 @@ class _CartPageState extends State<CartPage> {
             )
           : Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
+              child: ListView(
                 children: [
                   ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: cart.items.length,
                       itemBuilder: (context, index) {

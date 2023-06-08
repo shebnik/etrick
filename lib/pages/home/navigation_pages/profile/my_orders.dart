@@ -42,7 +42,7 @@ class _MyOrdersState extends State<MyOrders> {
                 var purchase = userModel.user!.purchases[index];
                 String title = 'Замовлення №${purchase.purchaseId}';
                 String subtitle =
-                    'Дата: ${Utils.formatDate(purchase.date)}\nВартість: ${Utils.formatPrice(purchase.totalPrice)} грн\nАдреса: ${purchase.selfDelivery ? "" : 'Нова пошта '}${purchase.address}';
+                    'Дата: ${Utils.formatDate(purchase.date)}\nВартість: ${Utils.formatPrice(purchase.totalPrice)}\nАдреса: ${purchase.selfDelivery ? "" : 'Нова пошта '}${purchase.address}';
                 return purchase.products.isEmpty
                     ? const SizedBox()
                     : Card(
@@ -64,7 +64,8 @@ class _MyOrdersState extends State<MyOrders> {
                                 style: TextStyle(
                                   color: purchase.status == 'Виконано'
                                       ? Colors.green
-                                      : purchase.status == 'Скасовано' || purchase.status == 'Відмінено'
+                                      : purchase.status == 'Скасовано' ||
+                                              purchase.status == 'Відмінено'
                                           ? Colors.red
                                           : Colors.orange,
                                 ),
@@ -89,7 +90,7 @@ class _MyOrdersState extends State<MyOrders> {
         var product = purchase.products[index];
         String itemTitle = '${product.name} ${product.color}';
         String itemSubtitle =
-            '${product.price} ₴ x ${product.quantity} = ${product.price * product.quantity} ₴';
+            '${Utils.formatPrice(product.price)} x ${product.quantity} = ${Utils.formatPrice(product.price * product.quantity)}.';
         return ListTile(
           leading: FutureBuilder(
             future: StorageService.getPicture(
