@@ -41,7 +41,9 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
           shrinkWrap: true,
           itemCount: items.length,
-          itemBuilder: (_, index) => CatalogListItem(index: index),
+          itemBuilder: (_, index) => CatalogListItem(
+            id: items[index].id,
+          ),
         ),
       ),
     );

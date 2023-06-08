@@ -9,13 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CatalogListItem extends StatefulWidget {
-  final int? index;
-  final String? id;
+  final String id;
 
   const CatalogListItem({
     Key? key,
-    this.index,
-    this.id,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -27,17 +25,9 @@ class _CatalogListItemState extends State<CatalogListItem> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.id != null) {
-      item = context.select<CatalogModel, CatalogItem>(
-        (catalog) => catalog.getById(widget.id!)!,
-      );
-    } else if (widget.index != null) {
-      item = context.select<CatalogModel, CatalogItem>(
-        (catalog) => catalog.getByPosition(widget.index!),
-      );
-    } else {
-      throw Exception('CatalogListItem: id or index must be provided');
-    }
+    item = context.select<CatalogModel, CatalogItem>(
+      (catalog) => catalog.getById(widget.id)!,
+    );
 
     return GestureDetector(
       onTap: () => Utils.showPageNoAnimation(

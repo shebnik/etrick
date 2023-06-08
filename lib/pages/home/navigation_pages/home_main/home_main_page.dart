@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:etrick/constants.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/pages/home/navigation_pages/catalog/catalog_list_item.dart';
@@ -20,23 +18,24 @@ class _HomeMainPageState extends State<HomeMainPage> {
     Map<String, String> categories = Constants.categories;
     List<String> categoriesKeys = categories.keys.toList();
     List<String> categoriesValues = categories.values.toList();
-
     return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: ListView(
         children: [
           const SizedBox(height: 16),
-          Text("Новинки", style: Theme.of(context).textTheme.titleLarge),
+          Center(
+            child:
+                Text("Новинки", style: Theme.of(context).textTheme.titleLarge),
+          ),
           const SizedBox(height: 16),
           ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: categories.length,
             itemBuilder: (_, index) {
               String category = categoriesValues[index];
               List<CatalogItem> items =
                   catalogModel.getItemsByCategory(categoriesKeys[index]);
               if (items.isEmpty) return Container();
-              int randomIndex = Random().nextInt(items.length);
               return Column(
                 children: [
                   const Divider(),
@@ -46,7 +45,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
                   ),
                   const SizedBox(height: 8),
                   SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
                     child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -54,8 +55,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
                       ),
                       shrinkWrap: true,
                       itemCount: items.length > 4 ? 4 : items.length,
-                      itemBuilder: (_, index) =>
-                          CatalogListItem(index: randomIndex),
+                      itemBuilder: (_, index) => CatalogListItem(
+                        id: items[index].id,
+                      ),
                     ),
                   ),
                 ],

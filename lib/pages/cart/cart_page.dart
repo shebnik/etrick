@@ -38,7 +38,10 @@ class _CartPageState extends State<CartPage> {
                       itemBuilder: (context, index) {
                         var item = cart.items[index];
                         return GestureDetector(
-                          child: ItemCard(item: item),
+                          child: ItemCard(
+                            item: item,
+                            key: Key(item.id),
+                          ),
                           onTap: () => Utils.showPageNoAnimation(
                             context,
                             CatalogItemDetail(

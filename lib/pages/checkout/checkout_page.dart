@@ -56,6 +56,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (!mounted) return;
     var cart = context.read<CartModel>();
     final purchase = Purchase(
+      date: DateTime.now(),
       purchaseId: Random().nextInt(1000000).toString(),
       products: cart.items,
       totalPrice: cart.totalPrice,
@@ -65,7 +66,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           : addressController.text.trim(),
     );
     userModel.user = userModel.user!.copyWith(
-      purchases: [...userModel.user!.purchases, purchase],
+      purchases: [purchase, ...userModel.user!.purchases],
     );
     await FirestoreService.addPurchase(userModel.user!.id, purchase);
     cart.clear();
@@ -107,6 +108,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               child: ItemCard(
                 item: item,
                 canRemove: false,
+                key: Key(item.id),
               ),
             );
           }),
@@ -281,6 +283,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ),
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

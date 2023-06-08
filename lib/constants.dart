@@ -16,7 +16,7 @@ class Constants {
     'cases': 'Чохли',
     'chargers': 'Зарядні пристрої',
     'auto_holders': 'Тримачі',
-    // 'cables': 'Кабелі',
+    'tv-cables': 'Кабелі та перехідники',
   };
 
   static String getCategoryAsset(String category) =>

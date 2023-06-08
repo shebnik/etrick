@@ -8,12 +8,14 @@ class Purchase {
   final String address;
   final String comment;
   final String status;
+  final DateTime date;
 
   const Purchase({
     required this.purchaseId,
     required this.products,
     required this.totalPrice,
     required this.selfDelivery,
+    required this.date,
     this.address = '',
     this.comment = '',
     this.status = 'В обробці',
@@ -29,6 +31,7 @@ class Purchase {
       address: map['address'] as String,
       comment: map['comment'] as String,
       status: map['status'] as String,
+      date: DateTime.parse(map['date'] as String),
     );
   }
 
@@ -41,6 +44,7 @@ class Purchase {
       'address': address,
       'comment': comment,
       'status': status,
+      'date': date.toIso8601String(),
     };
   }
 
@@ -52,6 +56,7 @@ class Purchase {
     String? address,
     String? comment,
     String? status,
+    DateTime? date,
   }) {
     return Purchase(
       purchaseId: purchaseId ?? this.purchaseId,
@@ -61,6 +66,7 @@ class Purchase {
       address: address ?? this.address,
       comment: comment ?? this.comment,
       status: status ?? this.status,
+      date: date ?? this.date,
     );
   }
 }

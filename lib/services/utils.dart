@@ -51,7 +51,6 @@ class Utils {
   }
 
   static String capitalize(String color) {
-    // capitalize all words in string
     return color.split(' ').map((word) {
       String firstLetter = word.substring(0, 1).toUpperCase();
       String rest = word.substring(1);
@@ -84,5 +83,34 @@ class Utils {
       appUserModel.user = await FirestoreService.getUserById(auth.user!.uid);
       catalog.items = await FirestoreService.getCatalog();
     });
+  }
+
+  static String formatDate(DateTime date) {
+    String day = date.day.toString().padLeft(2, '0');
+    String month = getUkrainianMonthAbbreviation(date.month);
+    String year = date.year.toString();
+    String hour = date.hour.toString().padLeft(2, '0');
+    String minute = date.minute.toString().padLeft(2, '0');
+    String second = date.second.toString().padLeft(2, '0');
+    return '$day $month $year $hour:$minute:$second';
+  }
+
+  static String getUkrainianMonthAbbreviation(int month) {
+    List<String> ukrainianMonths = [
+      '',
+      'Січня',
+      'Лютого',
+      'Березня',
+      'Квітня',
+      'Травня',
+      'Червня',
+      'Липня',
+      'Серпня',
+      'Вересня',
+      'Жовтня',
+      'Листопада',
+      'Грудня',
+    ];
+    return ukrainianMonths[month];
   }
 }

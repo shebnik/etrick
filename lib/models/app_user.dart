@@ -7,7 +7,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppUserModel extends ChangeNotifier {
   AppUser? _user;
 
-  AppUser? get user => _user;
+  AppUser? get user {
+    if (_user == null) {
+      loadUser();
+    }
+    return _user;
+  }
 
   set user(AppUser? user) {
     _user = user;
@@ -15,8 +20,8 @@ class AppUserModel extends ChangeNotifier {
   }
 
   @override
-  void notifyListeners() {
-    saveUser();
+  Future<void> notifyListeners() async {
+    await saveUser();
     super.notifyListeners();
   }
 

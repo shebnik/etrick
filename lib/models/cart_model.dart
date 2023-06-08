@@ -17,8 +17,8 @@ class CartModel extends ChangeNotifier {
   }
 
   @override
-  void notifyListeners() {
-    saveCart();
+  Future<void> notifyListeners() async {
+    await saveCart();
     super.notifyListeners();
   }
 
