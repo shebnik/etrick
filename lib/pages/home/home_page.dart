@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage>
   Widget _buildBody() {
     return SafeArea(
       child: TabBarView(
-        // physics: const NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
         children: tabBar.map((e) => e.page).toList(),
       ),

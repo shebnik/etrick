@@ -72,6 +72,7 @@ class _CatalogListItemState extends State<CatalogListItem> {
                   ),
                 ],
               ),
+              const SizedBox(height: 8),
             ],
           ),
         ),

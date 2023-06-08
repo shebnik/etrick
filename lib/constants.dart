@@ -11,12 +11,12 @@ class Constants {
   static const profileEditLoc = '/profile-edit';
 
   static const Map<String, String> categories = {
-    'headsets': 'Bluetooth-гарнітури',
-    'protect_skin': 'Захисні плівки та скло',
     'cases': 'Чохли',
-    'chargers': 'Зарядні пристрої',
-    'auto_holders': 'Тримачі',
     'tv-cables': 'Кабелі та перехідники',
+    'chargers': 'Зарядні пристрої',
+    'protect_skin': 'Захисні плівки та скло',
+    'headsets': 'Bluetooth-гарнітури',
+    'auto_holders': 'Тримачі',
   };
 
   static String getCategoryAsset(String category) =>

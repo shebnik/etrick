@@ -37,6 +37,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
                   catalogModel.getItemsByCategory(categoriesKeys[index]);
               if (items.isEmpty) return Container();
               return Column(
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Divider(),
                   Text(
@@ -44,15 +45,17 @@ class _HomeMainPageState extends State<HomeMainPage> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
-                  SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.35,
+                    ),
                     child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.7,
+                        crossAxisCount: 1,
+                        childAspectRatio: 0.7 * 2.5,
                       ),
+                      scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: items.length > 4 ? 4 : items.length,
                       itemBuilder: (_, index) => CatalogListItem(
