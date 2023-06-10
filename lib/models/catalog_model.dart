@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:etrick/providers/search_provider.dart';
 import 'package:etrick/providers/shared_preferences_provider.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -64,6 +65,16 @@ class CatalogModel extends ChangeNotifier {
       return item;
     }
     return null;
+  }
+
+  List<CatalogItem> getItemsBySearch(SearchProvider value) {
+    List<CatalogItem> items = [];
+    for (var item in _items) {
+      if (item.name.toLowerCase().contains(value.searchValue.toLowerCase())) {
+        items.add(item);
+      }
+    }
+    return items;
   }
 }
 

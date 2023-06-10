@@ -3,16 +3,16 @@ import 'package:provider/provider.dart';
 
 import '../providers/search_provider.dart';
 
-class SearchBar extends StatefulWidget {
-  const SearchBar({
+class AppSearchBar extends StatefulWidget {
+  const AppSearchBar({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<AppSearchBar> createState() => _AppSearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _AppSearchBarState extends State<AppSearchBar> {
   final TextEditingController _controller = TextEditingController();
   final ValueNotifier<bool> _showClearButton = ValueNotifier<bool>(false);
 
@@ -36,7 +36,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         top: 8,
         bottom: 8,
         left: 0,
@@ -58,7 +58,7 @@ class _SearchBarState extends State<SearchBar> {
                       splashRadius: 20,
                       padding: EdgeInsets.zero,
                       visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.clear),
+                      icon: const Icon(Icons.clear, color: Colors.white),
                       onPressed: _clear,
                     )
                   : const SizedBox();
@@ -70,14 +70,17 @@ class _SearchBarState extends State<SearchBar> {
           labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: Colors.white,
               ),
-          // enabledBorder: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(32.0),
-          //   borderSide: BorderSide(color: Theme.of(context).canvasColor),
-          // ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(32.0),
-          //   borderSide: BorderSide(color: Theme.of(context).canvasColor),
-          // ),
+              counterStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Colors.white,
+              ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(color: Theme.of(context).canvasColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(32.0),
+            borderSide: BorderSide(color: Theme.of(context).canvasColor),
+          ),
           contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
         ),
       ),
