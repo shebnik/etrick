@@ -9,6 +9,7 @@ class CartItem {
   int quantity;
   double price;
   String color;
+  List<Pictures>? pictures;
 
   CartItem({
     required this.id,
@@ -17,6 +18,7 @@ class CartItem {
     required this.quantity,
     required this.price,
     required this.color,
+    this.pictures,
   });
 
   factory CartItem.fromCatalogItem(CatalogItem item) {
@@ -27,6 +29,7 @@ class CartItem {
       price: item.price,
       color: item.colors.first,
       category: item.category,
+      pictures: item.pictures,
     );
   }
 
@@ -37,6 +40,7 @@ class CartItem {
     int? quantity,
     double? price,
     String? color,
+    List<Pictures>? pictures,
   }) {
     return CartItem(
       id: id ?? this.id,
@@ -45,6 +49,7 @@ class CartItem {
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       color: color ?? this.color,
+      pictures: pictures ?? this.pictures,
     );
   }
 
@@ -56,6 +61,7 @@ class CartItem {
       'quantity': quantity,
       'price': price,
       'color': color,
+      'pictures': pictures?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -67,6 +73,8 @@ class CartItem {
       quantity: map['quantity'],
       price: map['price'].toDouble(),
       color: map['color'],
+      pictures:
+          map['pictures'] != null ? List<Pictures>.from(map['pictures']) : null,
     );
   }
 

@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/catalog_model.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../providers/shared_preferences_provider.dart';
 
 class CartModel extends ChangeNotifier {
   late CatalogModel _catalog;
@@ -36,8 +39,8 @@ class CartModel extends ChangeNotifier {
         .firstWhere((catalogItem) => catalogItem.id == item.id);
   }
 
-  Future<void> loadCart() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void loadCart(BuildContext context) {
+    SharedPreferences prefs = context.read<SharedPreferencesProvider>().instance;
     List<String>? savedCart = prefs.getStringList('cart');
 
     if (savedCart != null) {

@@ -7,6 +7,7 @@ import 'package:etrick/services/storage_service.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:etrick/widgets/color_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CatalogItemDetail extends StatefulWidget {
   final CatalogItem item;
@@ -42,7 +43,11 @@ class _CatalogItemDetailState extends State<CatalogItemDetail> {
           children: [
             const SizedBox(height: 16),
             ItemPhotoSlider(
-              item: widget.item,
+              key: Key("${item.id}-$selectedColor"),
+              item: context
+                      .watch<CatalogModel>()
+                      .getCatalogItem(context, widget.item) ??
+                  widget.item,
               quality: PictureQuality.high,
               color: selectedColor,
             ),

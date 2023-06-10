@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:etrick/models/app_user.dart';
+import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/models/purchase.dart';
 import 'package:etrick/pages/home/home_app_bar.dart';
 import 'package:etrick/services/storage_service.dart';
@@ -81,7 +83,6 @@ class _MyOrdersState extends State<MyOrders> {
   }
 
   Widget purchaseProductsList(Purchase purchase) {
-    var cart = context.watch<CartModel>();
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -90,33 +91,53 @@ class _MyOrdersState extends State<MyOrders> {
         var product = purchase.products[index];
         String itemTitle = '${product.name} ${product.color}';
         String itemSubtitle =
-            '${Utils.formatPrice(product.price)} x ${product.quantity} = ${Utils.formatPrice(product.price * product.quantity)}.';
+            '${Utils.formatPrice(product.price)} x ${product.quantity} = ${Utils.formatPrice(product.price * product.quantity)}';
         return ListTile(
-          leading: FutureBuilder(
-            future: StorageService.getPicture(
-              item: cart.cartToCatalog(product),
-              pictureId: 0,
-              color: product.color,
-              quality: PictureQuality.low,
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return CachedNetworkImage(
-                  imageUrl: snapshot.data.toString(),
-                  height: 50,
-                  width: 50,
-                );
-              } else {
-                return const SizedBox();
-              }
-            },
-          ),
+          leading: itemPicture(product),
           title: Text(itemTitle),
           subtitle: Text(
             itemSubtitle,
           ),
         );
       },
+    );
+  }
+
+  Widget itemPicture(CartItem item) {
+    var cart = context.watch<CartModel>();
+    var savedItem = context
+        .watch<CatalogModel>()
+        .getCatalogItem(context, cart.cartToCatalog(item));
+    if (savedItem != null) {
+      item = CartItem.fromCatalogItem(savedItem);
+      if (savedItem.pictures != null) {
+        for (var picture in item.pictures!) {
+          if (picture.color == item.color) {
+            return cachedImage(picture.urls.first);
+          }
+        }
+      }
+    }
+    return FutureBuilder(
+      future: StorageService.getPicture(
+        item: cart.cartToCatalog(item),
+        pictureId: 0,
+        color: item.color,
+        quality: PictureQuality.low,
+      ),
+      builder: (_, snapshot) => snapshot.hasData
+          ? cachedImage(snapshot.data as String)
+          : const SizedBox.shrink(),
+    );
+  }
+
+  Widget cachedImage(String url) {
+    return CachedNetworkImage(
+      height: 50,
+      width: 50,
+      imageUrl: url,
+      placeholder: (context, url) => const SizedBox.shrink(),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
     );
   }
 }

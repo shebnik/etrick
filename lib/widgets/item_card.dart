@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:etrick/app_theme.dart';
 import 'package:etrick/models/cart_item.dart';
 import 'package:etrick/models/cart_model.dart';
+import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/storage_service.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:flutter/material.dart';
@@ -75,22 +76,39 @@ class _ItemCardState extends State<ItemCard> {
 
   Widget itemPreview(CartItem item) {
     var cart = context.watch<CartModel>();
+    var savedItem = context
+        .watch<CatalogModel>()
+        .getCatalogItem(context, cart.cartToCatalog(item));
+    if (savedItem != null) {
+      item = CartItem.fromCatalogItem(savedItem);
+      if (savedItem.pictures != null) {
+        for (var picture in item.pictures!) {
+          if (picture.color == item.color) {
+            return cachedImage(picture.urls.first);
+          }
+        }
+      }
+    }
     return FutureBuilder(
-        future: StorageService.getPicture(
-          item: cart.cartToCatalog(item),
-          pictureId: 0,
-          quality: PictureQuality.low,
-          color: item.color,
-        ),
-        builder: (context, snapshot) => snapshot.hasData
-            ? CachedNetworkImage(
-                height: 100,
-                imageUrl: snapshot.data as String,
-                placeholder: (context, url) => const SizedBox.shrink(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              )
-            : const SizedBox.shrink(),
-      );
+      future: StorageService.getPicture(
+        item: cart.cartToCatalog(item),
+        pictureId: 0,
+        quality: PictureQuality.low,
+        color: item.color,
+      ),
+      builder: (context, snapshot) => snapshot.hasData
+          ? cachedImage(snapshot.data as String)
+          : const SizedBox.shrink(),
+    );
+  }
+
+  Widget cachedImage(String url) {
+    return CachedNetworkImage(
+      height: 100,
+      imageUrl: url,
+      placeholder: (context, url) => const SizedBox.shrink(),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
   }
 
   Widget itemQuantity(CartItem item) {

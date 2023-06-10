@@ -1,3 +1,4 @@
+import 'package:etrick/constants.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/utils.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -32,5 +33,30 @@ class StorageService {
     final ListResult result = await folderRef.listAll();
 
     return result.items.length;
+  }
+
+  static downloadCatalogPictures(
+    CatalogModel catalog,
+    List<CatalogItem> items, [
+    List<String>? categories,
+  ]) async {
+    categories ??= Constants.categories.keys.toList();
+    List<CatalogItem> categoryItems =
+        items.where((item) => categories!.contains(item.category)).toList();
+    for (var item in categoryItems) {
+      List<Pictures> pictures = [];
+      await Future.forEach(item.colors, (color) async {
+        int idLength = await getPicturesCount(item: item, color: color);
+        List<String> urls = [];
+        for (int i = 0; i < idLength; i++) {
+          urls.add(await getPicture(item: item, pictureId: i, color: color));
+        }
+        pictures = [
+          ...pictures,
+          Pictures(color: color, urls: urls),
+        ];
+      });
+      catalog.saveCatalogItem(item, pictures);
+    }
   }
 }

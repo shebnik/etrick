@@ -2,6 +2,7 @@ import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/services/firestore_service.dart';
+import 'package:etrick/services/storage_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -82,6 +83,8 @@ class Utils {
       final catalog = context.read<CatalogModel>();
       appUserModel.user = await FirestoreService.getUserById(auth.user!.uid);
       catalog.items = await FirestoreService.getCatalog();
+      // if user setting autodownload
+      await StorageService.downloadCatalogPictures(catalog, catalog.items);
     });
   }
 

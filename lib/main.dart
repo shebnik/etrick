@@ -2,6 +2,8 @@ import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/providers/bottom_navigation_provider.dart';
+import 'package:etrick/providers/search_provider.dart';
+import 'package:etrick/providers/shared_preferences_provider.dart';
 import 'package:etrick/providers/theme_provider.dart';
 import 'package:etrick/services/app_router.dart';
 import 'package:etrick/services/auth_service.dart';
@@ -12,6 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -21,9 +24,13 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  var instance = await SharedPreferences.getInstance();
   runApp(
     MultiProvider(
       providers: [
+        Provider(
+          create: (_) => SharedPreferencesProvider(instance),
+        ),
         Provider(
           create: (_) => AuthService(),
         ),
@@ -36,14 +43,17 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (_) => CatalogModel(items: []),
         ),
+        ChangeNotifierProvider(
+          create: (_) => SearchProvider(),
+        ),
         ChangeNotifierProxyProvider<CatalogModel, CartModel>(
           create: (_) => CartModel(),
-          update: (_, catalog, cart) {
+          update: (context, catalog, cart) {
             if (cart == null) {
               throw ArgumentError.notNull('cart');
             }
             cart.catalog = catalog;
-            cart.loadCart();
+            cart.loadCart(context);
             return cart;
           },
         ),

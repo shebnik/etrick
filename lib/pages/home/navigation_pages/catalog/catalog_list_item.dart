@@ -28,7 +28,6 @@ class _CatalogListItemState extends State<CatalogListItem> {
     item = context.select<CatalogModel, CatalogItem>(
       (catalog) => catalog.getById(widget.id)!,
     );
-
     return GestureDetector(
       onTap: () => Utils.showPageNoAnimation(
         context,
@@ -36,13 +35,16 @@ class _CatalogListItemState extends State<CatalogListItem> {
       ),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: ItemPhotoSlider(
-                  item: item,
+                  item: context
+                          .read<CatalogModel>()
+                          .getCatalogItem(context, item) ??
+                      item,
                   quality: PictureQuality.low,
                 ),
               ),
@@ -72,7 +74,6 @@ class _CatalogListItemState extends State<CatalogListItem> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
             ],
           ),
         ),

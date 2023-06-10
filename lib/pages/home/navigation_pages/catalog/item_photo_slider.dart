@@ -24,23 +24,42 @@ class ItemPhotoSlider extends StatefulWidget {
 class _ItemPhotoSliderState extends State<ItemPhotoSlider> {
   late final CatalogItem item;
   late final PictureQuality quality;
+  late final String? color;
 
   int photosCount = 0;
   ValueNotifier<int> currentCarouselIndex = ValueNotifier(0);
+  List<String> urls = [];
 
   @override
   void initState() {
     super.initState();
     item = widget.item;
     quality = widget.quality;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      photosCount = await StorageService.getPicturesCount(
-        item: item,
-        quality: quality,
-        color: widget.color,
-      );
+    color = widget.color;
+    if (item.pictures != null) {
+      if (color == null) {
+        urls = item.pictures!.first.urls;
+        photosCount = urls.length > 5 ? 5 : urls.length;
+      } else {
+        for (var picture in item.pictures!) {
+          if (picture.color == color) {
+            urls = picture.urls;
+            break;
+          }
+        }
+        photosCount = urls.length > 5 ? 5 : urls.length;
+      }
       setState(() {});
-    });
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        photosCount = await StorageService.getPicturesCount(
+          item: item,
+          quality: quality,
+          color: widget.color,
+        );
+        setState(() {});
+      });
+    }
   }
 
   @override
@@ -58,24 +77,24 @@ class _ItemPhotoSliderState extends State<ItemPhotoSlider> {
           ),
           items: List.generate(
             photosCount,
-            (index) => FutureBuilder(
-              future: StorageService.getPicture(
-                item: item,
-                pictureId: index,
-                quality: quality,
-                color: widget.color,
-              ),
-              builder: (_, snapshot) => snapshot.data == null
-                  ? const SizedBox.shrink()
-                  : CachedNetworkImage(
-                      imageUrl: snapshot.data as String,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const SizedBox.shrink(),
-                      errorWidget: (context, url, error) => const Center(
-                        child: Icon(Icons.error),
-                      ),
-                    ),
-            ),
+            (index) {
+              if (item.pictures != null) {
+                return cachedImage(urls[index]);
+              }
+              return FutureBuilder(
+                future: StorageService.getPicture(
+                  item: item,
+                  pictureId: index,
+                  quality: quality,
+                  color: widget.color,
+                ),
+                builder: (_, snapshot) {
+                  return snapshot.data == null
+                      ? const SizedBox.shrink()
+                      : cachedImage(snapshot.data as String);
+                },
+              );
+            },
           ),
         ),
         const SizedBox(height: 8),
@@ -92,6 +111,17 @@ class _ItemPhotoSliderState extends State<ItemPhotoSlider> {
                 ),
         ),
       ],
+    );
+  }
+
+  Widget cachedImage(String url) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => const SizedBox.shrink(),
+      errorWidget: (context, url, error) => const Center(
+        child: Icon(Icons.error),
+      ),
     );
   }
 }

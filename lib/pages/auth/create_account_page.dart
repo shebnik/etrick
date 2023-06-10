@@ -4,6 +4,7 @@ import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/services/firestore_service.dart';
+import 'package:etrick/services/storage_service.dart';
 import 'package:etrick/widgets/logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -99,6 +100,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     }
     appUserModel.user = await FirestoreService.getUserById(auth.user!.uid);
     catalog.items = await FirestoreService.getCatalog();
+    await StorageService.downloadCatalogPictures(catalog, catalog.items);
   }
 
   @override
