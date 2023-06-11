@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:etrick/constants.dart';
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/purchase.dart';
@@ -73,6 +74,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       AppSnakbar(text: 'Замовлення оформлено').snackbar,
+    );
+    Utils.showNotification(
+      context,
+      Constants.appName,
+      'Ваше замовлення #${purchase.purchaseId} в обробці. Дякуємо за замовлення!',
     );
     while (context.canPop()) {
       context.pop();

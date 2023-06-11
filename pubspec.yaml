@@ -24,6 +24,8 @@ dependencies:
   intl: ^0.18.1
   shared_preferences: ^2.1.1
   collection: ^1.17.1
+  flutter_local_notifications: ^14.1.1
+  permission_handler: ^10.3.0
 
 dev_dependencies:
   flutter_test:

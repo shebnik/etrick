@@ -2,6 +2,7 @@ import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/cart_model.dart';
 import 'package:etrick/models/catalog_model.dart';
 import 'package:etrick/providers/bottom_navigation_provider.dart';
+import 'package:etrick/providers/notification_provider.dart';
 import 'package:etrick/providers/search_provider.dart';
 import 'package:etrick/providers/shared_preferences_provider.dart';
 import 'package:etrick/providers/theme_provider.dart';
@@ -13,6 +14,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,11 +28,26 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   var instance = await SharedPreferences.getInstance();
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  const initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  PermissionStatus status = await Permission.notification.request();
+  Utils.log('Permission status: $status');
   runApp(
     MultiProvider(
       providers: [
         Provider(
           create: (_) => SharedPreferencesProvider(instance),
+        ),
+        Provider(
+          create: (_) => NotificationProvider(
+            flutterLocalNotificationsPlugin,
+          ),
         ),
         Provider(
           create: (_) => AuthService(),

@@ -1,10 +1,12 @@
 import 'package:etrick/models/app_user.dart';
 import 'package:etrick/models/catalog_model.dart';
+import 'package:etrick/providers/notification_provider.dart';
 import 'package:etrick/services/auth_service.dart';
 import 'package:etrick/services/firestore_service.dart';
 import 'package:etrick/services/storage_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class Utils {
@@ -115,5 +117,31 @@ class Utils {
       'Грудня',
     ];
     return ukrainianMonths[month];
+  }
+
+  static Future<void> showNotification(
+    BuildContext context,
+    String title,
+    String body,
+  ) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await context
+        .read<NotificationProvider>()
+        .flutterLocalNotificationsPlugin
+        .show(
+          0,
+          title,
+          body,
+          platformChannelSpecifics,
+        );
   }
 }
